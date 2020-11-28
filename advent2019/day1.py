@@ -29,7 +29,25 @@ def calc_fuel(module_mass):
     return module_mass//3 - 2
 
 
+def calc_fuel_recursive(module_mass):
+    """Calculate the fuel required to launch a module based on its mass, including the mass of the added fuel"""
+    added_fuel = calc_fuel(module_mass)
+    if added_fuel <= 0:
+        return 0
+    else:
+        return added_fuel + calc_fuel_recursive(added_fuel)
+
+
+def get_part1_answer(module_masses):
+    return sum([calc_fuel(mass) for mass in module_masses])
+
+
+def get_part2_answer(module_masses):
+    return sum([calc_fuel_recursive(mass) for mass in module_masses])
+
+
 def run():
     with open(util.get_input_file_path('day1.txt')) as f:
-        total = sum([calc_fuel(int(mass)) for mass in f if len(mass.strip()) > 0])
-        print(f"The answer is {total}")
+        module_masses = [int(mass) for mass in f if len(mass.strip()) > 0]
+        print(f"The answer for part 1 is {get_part1_answer(module_masses)}")
+        print(f"The answer for part 2 is {get_part2_answer(module_masses)}")
