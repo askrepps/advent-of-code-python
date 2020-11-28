@@ -20,7 +20,16 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-.idea/
-venv/
 
-input/day*.txt
+from . import util
+
+
+def calc_fuel(module_mass):
+    """Calculate the fuel required to launch a module based on its mass"""
+    return module_mass//3 - 2
+
+
+def run():
+    with open(util.get_input_file_path('day1.txt')) as f:
+        total = sum([calc_fuel(int(mass)) for mass in f if len(mass.strip()) > 0])
+        print(f"The answer is {total}")

@@ -20,7 +20,16 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-.idea/
-venv/
 
-input/day*.txt
+import unittest
+
+from advent2019.day1 import calc_fuel
+
+
+class Day1Test(unittest.TestCase):
+    def test_day1(self):
+        # examples provided by day 1 prompt
+        self.assertEqual(calc_fuel(12), 2)
+        self.assertEqual(calc_fuel(14), 2)
+        self.assertEqual(calc_fuel(1969), 654)
+        self.assertEqual(calc_fuel(100756), 33583)

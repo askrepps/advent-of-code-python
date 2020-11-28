@@ -20,7 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-.idea/
-venv/
 
-input/day*.txt
+import os
+
+
+def get_input_file_path(file_name):
+    """Get the path to the input file with a given name (inside the input directory in the project root)"""
+    parent_path = os.path.split(os.path.abspath(__file__))[0]
+    return os.path.join(parent_path, '..', 'input', file_name)

@@ -20,7 +20,19 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-.idea/
-venv/
 
-input/day*.txt
+import unittest
+
+from advent2019.util import get_input_file_path
+
+
+class UtilTest(unittest.TestCase):
+    def test_input_file_path(self):
+        file_path = get_input_file_path('dummy.txt')
+        expected_lines = [
+            'Obtain input data for each day from the original source at https://adventofcode.com/2019\n',
+            'and save it in a txt file named after the corresponding day (day1.txt, day2.txt, etc.).\n'
+        ]
+        with open(file_path) as f:
+            lines = [line for line in f]
+            self.assertListEqual(lines, expected_lines)
