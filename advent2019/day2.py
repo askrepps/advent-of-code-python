@@ -26,6 +26,14 @@ import operator
 from . import util
 
 
+def run_program_with_noun_and_verb(program, noun, verb):
+    """Execute a copy of an Intcode computer program after writing the noun and verb to addresses 1 and 2"""
+    memory = [x for x in program]
+    memory[1] = noun
+    memory[2] = verb
+    return run_program(memory)
+
+
 def run_program(program):
     """Execute an Intcode computer program"""
     idx = 0
@@ -47,9 +55,21 @@ def run_program(program):
     return program
 
 
+def get_part1_answer(program):
+    return run_program_with_noun_and_verb(program, noun=12, verb=2)[0]
+
+
+def get_part2_answer(program):
+    for noun in range(0, 100):
+        for verb in range(0, 100):
+            result = run_program_with_noun_and_verb(program, noun, verb)[0]
+            if result == 19690720:
+                return noun*100 + verb
+    return None
+
+
 def run():
     with open(util.get_input_file_path("day2.txt")) as f:
         program = [int(x) for x in f.read().strip().split(',')]
-        program[1] = 12
-        program[2] = 2
-        print(f"The answer to part 1 is {run_program(program)[0]}")
+        print(f"The answer to part 1 is {get_part1_answer(program)}")
+        print(f"The answer to part 2 is {get_part2_answer(program)}")
