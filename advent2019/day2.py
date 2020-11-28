@@ -21,36 +21,35 @@
 # SOFTWARE.
 
 
-import sys
+import operator
 
-from advent2019 import day1
-from advent2019 import day2
-
-
-day_runners = [
-    lambda: day1.run(),
-    lambda: day2.run()
-]
+from . import util
 
 
-def raise_day_input_error(day, max_day):
-    raise RuntimeError(f"Day must be an integer between 1 and {max_day} (entered '{day}')")
+def run_program(program):
+    """Execute an Intcode computer program"""
+    idx = 0
+    while True:
+        opcode = program[idx]
+        if opcode == 1:
+            op = operator.add
+        elif opcode == 2:
+            op = operator.mul
+        elif opcode == 99:
+            break
+        else:
+            raise ValueError(f"Invalid opcode: '{opcode}'")
+        input_addr1 = program[idx + 1]
+        input_addr2 = program[idx + 2]
+        output_addr = program[idx + 3]
+        program[output_addr] = op(program[input_addr1], program[input_addr2])
+        idx += 4
+    return program
 
 
-def advent2019_main(args):
-    max_day = len(day_runners)
-    if len(args) == 0:
-        day = input(f"Enter a day to run (1 - {max_day}): ")
-    else:
-        day = args[0]
-    try:
-        day_idx = int(day) - 1
-        if day_idx < 0 or day_idx >= max_day:
-            raise_day_input_error(day, max_day)
-        day_runners[day_idx]()
-    except ValueError:
-        raise_day_input_error(day, max_day)
-
-
-if __name__ == '__main__':
-    advent2019_main(sys.argv[1:])
+def run():
+    with open(util.get_input_file_path("day2.txt")) as f:
+        program = [int(x) for x in f.read().strip().split(',')]
+        program[1] = 12
+        program[2] = 2
+        print(f"The answer to part 1 is {run_program(program)[0]}")

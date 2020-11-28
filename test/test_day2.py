@@ -21,36 +21,15 @@
 # SOFTWARE.
 
 
-import sys
+import unittest
 
-from advent2019 import day1
-from advent2019 import day2
-
-
-day_runners = [
-    lambda: day1.run(),
-    lambda: day2.run()
-]
+from advent2019.day2 import run_program
 
 
-def raise_day_input_error(day, max_day):
-    raise RuntimeError(f"Day must be an integer between 1 and {max_day} (entered '{day}')")
-
-
-def advent2019_main(args):
-    max_day = len(day_runners)
-    if len(args) == 0:
-        day = input(f"Enter a day to run (1 - {max_day}): ")
-    else:
-        day = args[0]
-    try:
-        day_idx = int(day) - 1
-        if day_idx < 0 or day_idx >= max_day:
-            raise_day_input_error(day, max_day)
-        day_runners[day_idx]()
-    except ValueError:
-        raise_day_input_error(day, max_day)
-
-
-if __name__ == '__main__':
-    advent2019_main(sys.argv[1:])
+class Day2Test(unittest.TestCase):
+    def test_day2_part1(self):
+        # examples provided by day 2 prompt
+        self.assertListEqual(run_program([1, 0, 0, 0, 99]), [2, 0, 0, 0, 99])
+        self.assertListEqual(run_program([2, 3, 0, 3, 99]), [2, 3, 0, 6, 99])
+        self.assertListEqual(run_program([2, 4, 4, 5, 99, 0]), [2, 4, 4, 5, 99, 9801])
+        self.assertListEqual(run_program([1, 1, 1, 4, 99, 5, 6, 0, 99]), [30, 1, 1, 4, 2, 5, 6, 0, 99])
