@@ -21,34 +21,24 @@
 # SOFTWARE.
 
 
-import sys
-
-from advent2020 import day1
+from . import util
 
 
-day_runners = [
-    lambda: day1.run()
-]
+def find_sum_pair(numbers, target):
+    """Find a pair of numbers from a list that sum to the target value"""
+    for ix, x in enumerate(numbers):
+        for iy, y in enumerate(numbers):
+            if ix != iy and x + y == target:
+                return x, y
+    return None
 
 
-def raise_day_input_error(day, max_day):
-    raise RuntimeError(f"Day must be an integer between 1 and {max_day} (entered '{day}')")
+def get_part1_answer(numbers):
+    pair = find_sum_pair(numbers, 2020)
+    return pair[0]*pair[1]
 
 
-def advent2020_main(args):
-    max_day = len(day_runners)
-    if len(args) == 0:
-        day = input(f"Enter a day to run (1 - {max_day}): ")
-    else:
-        day = args[0]
-    try:
-        day_idx = int(day) - 1
-        if day_idx < 0 or day_idx >= max_day:
-            raise_day_input_error(day, max_day)
-        day_runners[day_idx]()
-    except ValueError:
-        raise_day_input_error(day, max_day)
-
-
-if __name__ == '__main__':
-    advent2020_main(sys.argv[1:])
+def run():
+    with open(util.get_input_file_path("day1.txt")) as f:
+        numbers = [int(line) for line in f if len(line) > 0]
+        print(f"The answer to part 1 is {get_part1_answer(numbers)}")

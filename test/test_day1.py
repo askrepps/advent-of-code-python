@@ -21,34 +21,16 @@
 # SOFTWARE.
 
 
-import sys
+import unittest
 
-from advent2020 import day1
-
-
-day_runners = [
-    lambda: day1.run()
-]
+from advent2020.day1 import find_sum_pair
 
 
-def raise_day_input_error(day, max_day):
-    raise RuntimeError(f"Day must be an integer between 1 and {max_day} (entered '{day}')")
-
-
-def advent2020_main(args):
-    max_day = len(day_runners)
-    if len(args) == 0:
-        day = input(f"Enter a day to run (1 - {max_day}): ")
-    else:
-        day = args[0]
-    try:
-        day_idx = int(day) - 1
-        if day_idx < 0 or day_idx >= max_day:
-            raise_day_input_error(day, max_day)
-        day_runners[day_idx]()
-    except ValueError:
-        raise_day_input_error(day, max_day)
-
-
-if __name__ == '__main__':
-    advent2020_main(sys.argv[1:])
+class Day1Test(unittest.TestCase):
+    def test_day1_part1(self):
+        numbers = [1721, 979, 366, 299, 675, 1456]
+        pair = find_sum_pair(numbers, 2020)
+        self.assertEqual(len(pair), 2)
+        self.assertIn(1721, pair)
+        self.assertIn(299, pair)
+        self.assertEqual(pair[0]*pair[1], 514579)
