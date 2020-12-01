@@ -33,12 +33,28 @@ def find_sum_pair(numbers, target):
     return None
 
 
+def find_sum_triple(numbers, target):
+    """Find three numbers from a list that sum to the target value"""
+    for ix, x in enumerate(numbers):
+        for iy, y in enumerate(numbers):
+            for iz, z in enumerate(numbers):
+                if ix != iy and ix != iz and iy != iz and x + y + z == target:
+                    return x, y, z
+    return None
+
+
 def get_part1_answer(numbers):
     pair = find_sum_pair(numbers, 2020)
     return pair[0]*pair[1]
+
+
+def get_part2_answer(numbers):
+    triple = find_sum_triple(numbers, 2020)
+    return triple[0]*triple[1]*triple[2]
 
 
 def run():
     with open(util.get_input_file_path("day1.txt")) as f:
         numbers = [int(line) for line in f if len(line) > 0]
         print(f"The answer to part 1 is {get_part1_answer(numbers)}")
+        print(f"The answer to part 2 is {get_part2_answer(numbers)}")

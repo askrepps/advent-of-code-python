@@ -24,6 +24,7 @@
 import unittest
 
 from advent2020.day1 import find_sum_pair
+from advent2020.day1 import find_sum_triple
 
 
 class Day1Test(unittest.TestCase):
@@ -34,3 +35,12 @@ class Day1Test(unittest.TestCase):
         self.assertIn(1721, pair)
         self.assertIn(299, pair)
         self.assertEqual(pair[0]*pair[1], 514579)
+
+    def test_day1_part2(self):
+        numbers = [1721, 979, 366, 299, 675, 1456]
+        triple = find_sum_triple(numbers, 2020)
+        self.assertEqual(len(triple), 3)
+        self.assertIn(979, triple)
+        self.assertIn(366, triple)
+        self.assertIn(675, triple)
+        self.assertEqual(triple[0]*triple[1]*triple[2], 241861950)
