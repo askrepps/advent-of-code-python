@@ -28,13 +28,19 @@ def count_letter_instances(password, letter):
     return sum([1 for c in password if c == letter])
 
 
-def password_is_valid(entry):
+def password_is_valid_for_part1(entry):
     letter_count = count_letter_instances(entry["password"], entry["letter"])
     return entry["min"] <= letter_count <= entry["max"]
 
 
-def count_valid_passwords(entries):
-    return sum([1 for entry in entries if password_is_valid(entry)])
+def password_is_valid_for_part2(entry):
+    min_char_matches = entry["password"][entry["min"] - 1] == entry["letter"]
+    max_char_matches = entry["password"][entry["max"] - 1] == entry["letter"]
+    return min_char_matches != max_char_matches
+
+
+def count_valid_passwords(entries, validation_rule):
+    return sum([1 for entry in entries if validation_rule(entry)])
 
 
 def parse_entries(lines):
@@ -54,10 +60,15 @@ def parse_entries(lines):
 
 
 def get_part1_answer(entries):
-    return count_valid_passwords(entries)
+    return count_valid_passwords(entries, password_is_valid_for_part1)
+
+
+def get_part2_answer(entries):
+    return count_valid_passwords(entries, password_is_valid_for_part2)
 
 
 def run():
     with open(util.get_input_file_path("day2.txt")) as f:
         entries = parse_entries([line for line in f if len(line) > 0])
         print(f"The answer to part 1 is {get_part1_answer(entries)}")
+        print(f"The answer to part 2 is {get_part2_answer(entries)}")

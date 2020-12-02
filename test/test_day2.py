@@ -25,6 +25,8 @@ import unittest
 
 from advent2020.day2 import parse_entries
 from advent2020.day2 import count_valid_passwords
+from advent2020.day2 import password_is_valid_for_part1
+from advent2020.day2 import password_is_valid_for_part2
 
 
 class Day2Test(unittest.TestCase):
@@ -41,4 +43,5 @@ class Day2Test(unittest.TestCase):
             {"password": "ccccccccc", "letter": "c", "min": 2, "max": 9},
         ]
         self.assertListEqual(entries, expected_entries)
-        self.assertEqual(count_valid_passwords(entries), 2)
+        self.assertEqual(count_valid_passwords(entries, password_is_valid_for_part1), 2)
+        self.assertEqual(count_valid_passwords(entries, password_is_valid_for_part2), 1)
