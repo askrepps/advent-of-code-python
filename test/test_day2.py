@@ -30,7 +30,7 @@ from advent2020.day2 import password_is_valid_for_part2
 
 
 class Day2Test(unittest.TestCase):
-    def test_day2_part1(self):
+    def test_day2(self):
         lines = [
             "1-3 a: abcde",
             "1-3 b: cdefg",
