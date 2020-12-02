@@ -21,36 +21,43 @@
 # SOFTWARE.
 
 
-import sys
-
-from advent2020 import day1
-from advent2020 import day2
+from . import util
 
 
-day_runners = [
-    lambda: day1.run(),
-    lambda: day2.run()
-]
+def count_letter_instances(password, letter):
+    return sum([1 for c in password if c == letter])
 
 
-def raise_day_input_error(day, max_day):
-    raise RuntimeError(f"Day must be an integer between 1 and {max_day} (entered '{day}')")
+def password_is_valid(entry):
+    letter_count = count_letter_instances(entry["password"], entry["letter"])
+    return entry["min"] <= letter_count <= entry["max"]
 
 
-def advent2020_main(args):
-    max_day = len(day_runners)
-    if len(args) == 0:
-        day = input(f"Enter a day to run (1 - {max_day}): ")
-    else:
-        day = args[0]
-    try:
-        day_idx = int(day) - 1
-        if day_idx < 0 or day_idx >= max_day:
-            raise_day_input_error(day, max_day)
-        day_runners[day_idx]()
-    except ValueError:
-        raise_day_input_error(day, max_day)
+def count_valid_passwords(entries):
+    return sum([1 for entry in entries if password_is_valid(entry)])
 
 
-if __name__ == '__main__':
-    advent2020_main(sys.argv[1:])
+def parse_entries(lines):
+    entries = []
+    for line in lines:
+        tokens = line.split()
+        counts = tokens[0].split("-")
+        letter = tokens[1][0]
+        password = tokens[2]
+        entries.append({
+            "password": password,
+            "letter": letter,
+            "min": int(counts[0]),
+            "max": int(counts[1])
+        })
+    return entries
+
+
+def get_part1_answer(entries):
+    return count_valid_passwords(entries)
+
+
+def run():
+    with open(util.get_input_file_path("day2.txt")) as f:
+        entries = parse_entries([line for line in f if len(line) > 0])
+        print(f"The answer to part 1 is {get_part1_answer(entries)}")
