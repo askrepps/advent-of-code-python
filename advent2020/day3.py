@@ -21,38 +21,42 @@
 # SOFTWARE.
 
 
-import sys
-
-from advent2020 import day1
-from advent2020 import day2
-from advent2020 import day3
+from . import util
 
 
-day_runners = [
-    lambda: day1.run(),
-    lambda: day2.run(),
-    lambda: day3.run()
-]
+def count_tree_encounters(tree_grid, slope_down, slope_right):
+    row = 0
+    col = 0
+    count = 0
+    while row < len(tree_grid):
+        if tree_grid[row][col]:
+            count += 1
+        row += slope_down
+        col = (col + slope_right) % len(tree_grid[0])
+    return count
 
 
-def raise_day_input_error(day, max_day):
-    raise RuntimeError(f"Day must be an integer between 1 and {max_day} (entered '{day}')")
+def load_trees(lines):
+    return [
+        [c == '#' for c in line.strip()]
+        for line in lines
+    ]
 
 
-def advent2020_main(args):
-    max_day = len(day_runners)
-    if len(args) == 0:
-        day = input(f"Enter a day to run (1 - {max_day}): ")
-    else:
-        day = args[0]
-    try:
-        day_idx = int(day) - 1
-        if day_idx < 0 or day_idx >= max_day:
-            raise_day_input_error(day, max_day)
-        day_runners[day_idx]()
-    except ValueError:
-        raise_day_input_error(day, max_day)
+def get_part1_answer(tree_grid):
+    return count_tree_encounters(tree_grid, 1, 3)
 
 
-if __name__ == '__main__':
-    advent2020_main(sys.argv[1:])
+def get_part2_answer(tree_grid):
+    product = 1
+    slopes = [(1, 1), (1, 3), (1, 5), (1, 7), (2, 1)]
+    for slope in slopes:
+        product *= count_tree_encounters(tree_grid, slope[0], slope[1])
+    return product
+
+
+def run():
+    with open(util.get_input_file_path("day3.txt")) as f:
+        tree_grid = load_trees([line for line in f if len(line) > 0])
+        print(f"The answer to part 1 is {get_part1_answer(tree_grid)}")
+        print(f"The answer to part 2 is {get_part2_answer(tree_grid)}")
