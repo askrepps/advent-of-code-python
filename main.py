@@ -26,12 +26,14 @@ import sys
 from advent2020 import day1
 from advent2020 import day2
 from advent2020 import day3
+from advent2020 import day4
 
 
 day_runners = [
     lambda: day1.run(),
     lambda: day2.run(),
-    lambda: day3.run()
+    lambda: day3.run(),
+    lambda: day4.run()
 ]
 
 
