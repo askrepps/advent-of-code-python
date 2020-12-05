@@ -21,42 +21,18 @@
 # SOFTWARE.
 
 
-import sys
+import unittest
 
-from advent2020 import day1
-from advent2020 import day2
-from advent2020 import day3
-from advent2020 import day4
-from advent2020 import day5
+from advent2020.day5 import *
 
 
-day_runners = [
-    lambda: day1.run(),
-    lambda: day2.run(),
-    lambda: day3.run(),
-    lambda: day4.run(),
-    lambda: day5.run()
-]
-
-
-def raise_day_input_error(day, max_day):
-    raise RuntimeError(f"Day must be an integer between 1 and {max_day} (entered '{day}')")
-
-
-def advent2020_main(args):
-    max_day = len(day_runners)
-    if len(args) == 0:
-        day = input(f"Enter a day to run (1 - {max_day}): ")
-    else:
-        day = args[0]
-    try:
-        day_idx = int(day) - 1
-        if day_idx < 0 or day_idx >= max_day:
-            raise_day_input_error(day, max_day)
-        day_runners[day_idx]()
-    except ValueError:
-        raise_day_input_error(day, max_day)
-
-
-if __name__ == '__main__':
-    advent2020_main(sys.argv[1:])
+class Day5Test(unittest.TestCase):
+    def test_day5(self):
+        self.assertEqual(get_seat_row_col("FBFBBFFRLR"), (44, 5))
+        self.assertEqual(get_seat_id("FBFBBFFRLR"), 357)
+        self.assertEqual(get_seat_row_col("BFFFBBFRRR"), (70, 7))
+        self.assertEqual(get_seat_id("BFFFBBFRRR"), 567)
+        self.assertEqual(get_seat_row_col("FFFBBBFRRR"), (14, 7))
+        self.assertEqual(get_seat_id("FFFBBBFRRR"), 119)
+        self.assertEqual(get_seat_row_col("BBFFBBFRLL"), (102, 4))
+        self.assertEqual(get_seat_id("BBFFBBFRLL"), 820)
