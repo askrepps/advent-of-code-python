@@ -49,7 +49,7 @@ def get_part1_answer(seat_ids):
 
 def get_part2_answer(seat_ids):
     sorted_ids = sorted(seat_ids)
-    for idx in sorted_ids:
+    for idx in range(len(sorted_ids)):
         if idx < len(sorted_ids) - 1 and sorted_ids[idx] + 1 == sorted_ids[idx + 1] - 1:
             return sorted_ids[idx] + 1
     return None
