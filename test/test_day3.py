@@ -21,38 +21,33 @@
 # SOFTWARE.
 
 
-import sys
+import unittest
 
-from advent2019 import day1
-from advent2019 import day2
-from advent2019 import day3
-
-
-day_runners = [
-    lambda: day1.run(),
-    lambda: day2.run(),
-    lambda: day3.run()
-]
+from advent2019.day3 import get_part1_answer
+from advent2019.day3 import get_part2_answer
 
 
-def raise_day_input_error(day, max_day):
-    raise RuntimeError(f"Day must be an integer between 1 and {max_day} (entered '{day}')")
+def prep_data(path_data):
+    return [line for line in path_data.split("\n") if len(line.strip()) > 0]
 
 
-def advent2019_main(args):
-    max_day = len(day_runners)
-    if len(args) == 0:
-        day = input(f"Enter a day to run (1 - {max_day}): ")
-    else:
-        day = args[0]
-    try:
-        day_idx = int(day) - 1
-        if day_idx < 0 or day_idx >= max_day:
-            raise_day_input_error(day, max_day)
-        day_runners[day_idx]()
-    except ValueError:
-        raise_day_input_error(day, max_day)
+class Day3Test(unittest.TestCase):
+    def test_day3(self):
+        path_data1 = """
+            R75,D30,R83,U83,L12,D49,R71,U7,L72
+            U62,R66,U55,R34,D71,R55,D58,R83
+        """
+        path_data2 = """
+            R98,U47,R26,D63,R33,U87,L62,D20,R33,U53,R51
+            U98,R91,D20,R16,D67,R40,U7,R15,U6,R7
+        """
+        self.run_part1_test(path_data1, 159)
+        self.run_part1_test(path_data2, 135)
+        self.run_part2_test(path_data1, 610)
+        self.run_part2_test(path_data2, 410)
 
+    def run_part1_test(self, path_data, expected_distance):
+        self.assertEqual(get_part1_answer(prep_data(path_data)), expected_distance)
 
-if __name__ == '__main__':
-    advent2019_main(sys.argv[1:])
+    def run_part2_test(self, path_data, expected_distance):
+        self.assertEqual(get_part2_answer(prep_data(path_data)), expected_distance)
