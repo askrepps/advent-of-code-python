@@ -24,12 +24,12 @@
 from . import util
 
 
-def get_unique_answers(group_answers):
-    encountered = set()
-    for c in group_answers:
-        if 'a' <= c <= 'z':
-            encountered.add(c)
-    return encountered
+def get_unique_answers(answers):
+    unique_answers = set()
+    for answer in answers:
+        if 'a' <= answer <= 'z':
+            unique_answers.add(answer)
+    return unique_answers
 
 
 def get_consistent_answers(group_answers):
