@@ -24,24 +24,19 @@
 from . import util
 
 
+all_letters = {chr(c) for c in range(ord('a'), ord('z') + 1)}
+
+
 def get_unique_answers(answers):
-    unique_answers = set()
-    for answer in answers:
-        if 'a' <= answer <= 'z':
-            unique_answers.add(answer)
-    return unique_answers
+    return set([c for c in answers]).intersection(all_letters)
 
 
 def get_consistent_answers(group_answers):
-    counts = {}
     individual_answers = group_answers.split("\n")
+    result = all_letters.copy() if len(individual_answers) > 0 else set()
     for answers in individual_answers:
-        for answer in get_unique_answers(answers):
-            if answer not in counts.keys():
-                counts[answer] = 0
-            counts[answer] += 1
-    num_people = len(individual_answers)
-    return [c for c in counts.keys() if counts[c] == num_people]
+        result.intersection_update(answers)
+    return result
 
 
 def get_part1_answer(all_group_answers):
