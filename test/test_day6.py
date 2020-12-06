@@ -21,44 +21,33 @@
 # SOFTWARE.
 
 
-import sys
+import unittest
 
-from advent2020 import day1
-from advent2020 import day2
-from advent2020 import day3
-from advent2020 import day4
-from advent2020 import day5
-from advent2020 import day6
+from advent2020.day6 import get_part1_answer
+from advent2020.day6 import get_part2_answer
 
 
-day_runners = [
-    lambda: day1.run(),
-    lambda: day2.run(),
-    lambda: day3.run(),
-    lambda: day4.run(),
-    lambda: day5.run(),
-    lambda: day6.run()
-]
+answer_data = """
+abc
+
+a
+b
+c
+
+ab
+ac
+
+a
+a
+a
+a
+
+b
+"""
 
 
-def raise_day_input_error(day, max_day):
-    raise RuntimeError(f"Day must be an integer between 1 and {max_day} (entered '{day}')")
-
-
-def advent2020_main(args):
-    max_day = len(day_runners)
-    if len(args) == 0:
-        day = input(f"Enter a day to run (1 - {max_day}): ")
-    else:
-        day = args[0]
-    try:
-        day_idx = int(day) - 1
-        if day_idx < 0 or day_idx >= max_day:
-            raise_day_input_error(day, max_day)
-        day_runners[day_idx]()
-    except ValueError:
-        raise_day_input_error(day, max_day)
-
-
-if __name__ == '__main__':
-    advent2020_main(sys.argv[1:])
+class Day6Test(unittest.TestCase):
+    def test_day6(self):
+        all_group_answers = [group.strip() for group in answer_data.split("\n\n")]
+        self.assertEqual(get_part1_answer(all_group_answers), 11)
+        self.assertEqual(get_part2_answer(all_group_answers), 6)
