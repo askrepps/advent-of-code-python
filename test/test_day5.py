@@ -23,7 +23,8 @@
 
 import unittest
 
-from advent2020.day5 import *
+from advent2020.day5 import get_seat_id
+from advent2020.day5 import get_seat_row_col
 
 
 class Day5Test(unittest.TestCase):
