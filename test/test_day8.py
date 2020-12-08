@@ -21,48 +21,29 @@
 # SOFTWARE.
 
 
-import sys
+import unittest
 
-from advent2020 import day1
-from advent2020 import day2
-from advent2020 import day3
-from advent2020 import day4
-from advent2020 import day5
-from advent2020 import day6
-from advent2020 import day7
-from advent2020 import day8
+from advent2020.day8 import get_part1_answer
+from advent2020.day8 import get_part2_answer
+from advent2020.day8 import parse_instructions
 
 
-day_runners = [
-    lambda: day1.run(),
-    lambda: day2.run(),
-    lambda: day3.run(),
-    lambda: day4.run(),
-    lambda: day5.run(),
-    lambda: day6.run(),
-    lambda: day7.run(),
-    lambda: day8.run()
-]
+data = """
+nop +0
+acc +1
+jmp +4
+acc +3
+jmp -3
+acc -99
+acc +1
+jmp -4
+acc +6
+"""
 
 
-def raise_day_input_error(day, max_day):
-    raise RuntimeError(f"Day must be an integer between 1 and {max_day} (entered '{day}')")
-
-
-def advent2020_main(args):
-    max_day = len(day_runners)
-    if len(args) == 0:
-        day = input(f"Enter a day to run (1 - {max_day}): ")
-    else:
-        day = args[0]
-    try:
-        day_idx = int(day) - 1
-        if day_idx < 0 or day_idx >= max_day:
-            raise_day_input_error(day, max_day)
-        day_runners[day_idx]()
-    except ValueError:
-        raise_day_input_error(day, max_day)
-
-
-if __name__ == '__main__':
-    advent2020_main(sys.argv[1:])
+class Day7Test(unittest.TestCase):
+    def test_day7_part1(self):
+        lines = [line.strip() for line in data.split("\n") if len(line.strip()) > 0]
+        instructions = parse_instructions(lines)
+        self.assertEqual(get_part1_answer(instructions), 5)
+        self.assertEqual(get_part2_answer(instructions), 8)
