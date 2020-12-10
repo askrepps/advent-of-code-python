@@ -41,8 +41,8 @@ acc +6
 """
 
 
-class Day7Test(unittest.TestCase):
-    def test_day7_part1(self):
+class Day8Test(unittest.TestCase):
+    def test_day8(self):
         lines = [line.strip() for line in data.split("\n") if len(line.strip()) > 0]
         instructions = parse_instructions(lines)
         self.assertEqual(get_part1_answer(instructions), 5)
