@@ -21,50 +21,38 @@
 # SOFTWARE.
 
 
-import sys
+import unittest
 
-from advent2020 import day1
-from advent2020 import day2
-from advent2020 import day3
-from advent2020 import day4
-from advent2020 import day5
-from advent2020 import day6
-from advent2020 import day7
-from advent2020 import day8
-from advent2020 import day9
+from advent2020.day9 import find_contiguous_sum
+from advent2020.day9 import find_invalid_number
 
 
-day_runners = [
-    lambda: day1.run(),
-    lambda: day2.run(),
-    lambda: day3.run(),
-    lambda: day4.run(),
-    lambda: day5.run(),
-    lambda: day6.run(),
-    lambda: day7.run(),
-    lambda: day8.run(),
-    lambda: day9.run()
-]
+data = """
+35
+20
+15
+25
+47
+40
+62
+55
+65
+95
+102
+117
+150
+182
+127
+219
+299
+277
+309
+576
+"""
 
 
-def raise_day_input_error(day, max_day):
-    raise RuntimeError(f"Day must be an integer between 1 and {max_day} (entered '{day}')")
-
-
-def advent2020_main(args):
-    max_day = len(day_runners)
-    if len(args) == 0:
-        day = input(f"Enter a day to run (1 - {max_day}): ")
-    else:
-        day = args[0]
-    try:
-        day_idx = int(day) - 1
-        if day_idx < 0 or day_idx >= max_day:
-            raise_day_input_error(day, max_day)
-        day_runners[day_idx]()
-    except ValueError:
-        raise_day_input_error(day, max_day)
-
-
-if __name__ == '__main__':
-    advent2020_main(sys.argv[1:])
+class Day9Test(unittest.TestCase):
+    def test_day9_part1(self):
+        numbers = [int(line) for line in data.split("\n") if len(line.strip()) > 0]
+        self.assertEqual(find_invalid_number(numbers, 5), 127)
+        self.assertListEqual(find_contiguous_sum(numbers, 127), [15, 25, 47, 40])
