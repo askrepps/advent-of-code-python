@@ -32,7 +32,14 @@ def parse_instructions(lines):
     return instructions
 
 
-def run_program(instructions, allow_change=False):
+def run_modified_program(instructions, changed_idx, changed_op):
+    # run entire modified program (don't allow further changes)
+    changed_instructions = instructions.copy()
+    changed_instructions[changed_idx] = (changed_op, instructions[changed_idx][1])
+    return run_program(changed_instructions, allow_change=False)
+
+
+def run_program(instructions, allow_change):
     executed = set()
     idx = 0
     acc = 0
@@ -42,11 +49,7 @@ def run_program(instructions, allow_change=False):
         if next_instruction[0] == "nop":
             if allow_change:
                 # see if changing the nop to a jmp fixes the infinite loop
-                changed_instructions = instructions.copy()
-                changed_instructions[idx] = ("jmp", instructions[idx][1])
-
-                # run entire "fixed" program (don't allow further changes)
-                change_worked, changed_acc = run_program(changed_instructions, allow_change=False)
+                change_worked, changed_acc = run_modified_program(instructions, idx, "jmp")
                 if change_worked:
                     return change_worked, changed_acc
             idx += 1
@@ -56,11 +59,7 @@ def run_program(instructions, allow_change=False):
         elif next_instruction[0] == "jmp":
             if allow_change:
                 # see if changing the jmp to a nop fixes the infinite loop
-                changed_instructions = instructions.copy()
-                changed_instructions[idx] = ("nop", instructions[idx][1])
-
-                # run entire "fixed" program (don't allow further changes)
-                change_worked, changed_acc = run_program(changed_instructions, allow_change=False)
+                change_worked, changed_acc = run_modified_program(instructions, idx, "nop")
                 if change_worked:
                     return change_worked, changed_acc
             idx += next_instruction[1]
