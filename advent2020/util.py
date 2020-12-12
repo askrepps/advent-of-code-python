@@ -28,3 +28,19 @@ def get_input_file_path(file_name):
     """Get the path to the input file with a given name (inside the input directory in the project root)"""
     parent_path = os.path.split(os.path.abspath(__file__))[0]
     return os.path.join(parent_path, '..', 'input', file_name)
+
+
+def get_input_file_lines(file_name):
+    """Get the non-empty lines from the input file with a given name"""
+    with open(get_input_file_path(file_name)) as f:
+        return remove_blank_lines(f)
+
+
+def get_input_data_lines(data):
+    """Get the non-empty lines from a string containing all input data"""
+    return remove_blank_lines(data.split("\n"))
+
+
+def remove_blank_lines(lines):
+    """Get all non-blank lines out of a list of lines"""
+    return [line_out for line_out in (line_in.strip() for line_in in lines) if len(line_out) > 0]

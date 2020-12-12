@@ -28,21 +28,14 @@ from . import util
 
 def parse_passport(line_group):
     passport = {}
-    for line in line_group:
-        for entries in line.split():
-            tokens = entries.split(":")
-            passport[tokens[0].strip()] = tokens[1].strip()
+    for entries in line_group.split():
+        tokens = entries.split(":")
+        passport[tokens[0].strip()] = tokens[1].strip()
     return passport
 
 
-def load_passports(lines):
-    line_groups = [[]]
-    for line in lines:
-        if len(line.strip()) > 0:
-            line_groups[-1].append(line)
-        else:
-            line_groups.append([])
-    return [parse_passport(group) for group in line_groups if len(group) > 0]
+def load_passports(passport_data):
+    return [parse_passport(group) for group in passport_data.split("\n\n") if len(group.strip()) > 0]
 
 
 def check_passport_is_valid_for_part1(passport):
@@ -115,7 +108,6 @@ def get_part2_answer(passports):
 
 def run():
     with open(util.get_input_file_path("day4.txt")) as f:
-        lines = [line for line in f]
-        passports = load_passports(lines)
+        passports = load_passports(f.read())
         print(f"The answer to part 1 is {get_part1_answer(passports)}")
         print(f"The answer to part 2 is {get_part2_answer(passports)}")

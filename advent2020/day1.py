@@ -54,7 +54,6 @@ def get_part2_answer(numbers):
 
 
 def run():
-    with open(util.get_input_file_path("day1.txt")) as f:
-        numbers = [int(line) for line in f if len(line) > 0]
-        print(f"The answer to part 1 is {get_part1_answer(numbers)}")
-        print(f"The answer to part 2 is {get_part2_answer(numbers)}")
+    numbers = [int(line) for line in util.get_input_file_lines("day1.txt")]
+    print(f"The answer to part 1 is {get_part1_answer(numbers)}")
+    print(f"The answer to part 2 is {get_part2_answer(numbers)}")

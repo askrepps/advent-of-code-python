@@ -56,7 +56,6 @@ def get_part2_answer(tree_grid):
 
 
 def run():
-    with open(util.get_input_file_path("day3.txt")) as f:
-        tree_grid = load_trees([line for line in f if len(line) > 0])
-        print(f"The answer to part 1 is {get_part1_answer(tree_grid)}")
-        print(f"The answer to part 2 is {get_part2_answer(tree_grid)}")
+    tree_grid = load_trees(util.get_input_file_lines("day3.txt"))
+    print(f"The answer to part 1 is {get_part1_answer(tree_grid)}")
+    print(f"The answer to part 2 is {get_part2_answer(tree_grid)}")

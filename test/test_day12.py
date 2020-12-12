@@ -26,6 +26,7 @@ import unittest
 from advent2020.day12 import get_part1_answer
 from advent2020.day12 import get_part2_answer
 from advent2020.day12 import parse_commands
+from advent2020.util import get_input_data_lines
 
 
 ship_data = """
@@ -39,7 +40,7 @@ F11
 
 class Day12Test(unittest.TestCase):
     def test_day12(self):
-        lines = [line.strip() for line in ship_data.split("\n") if len(line.strip()) > 0]
+        lines = get_input_data_lines(ship_data)
         commands = parse_commands(lines)
         self.assertEqual(get_part1_answer(commands), 25)
         self.assertEqual(get_part2_answer(commands), 286)

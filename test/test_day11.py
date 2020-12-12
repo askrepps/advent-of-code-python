@@ -25,6 +25,7 @@ import unittest
 
 from advent2020.day11 import get_part1_answer
 from advent2020.day11 import get_part2_answer
+from advent2020.util import get_input_data_lines
 
 
 seat_data = """
@@ -43,6 +44,6 @@ L.LLLLL.LL
 
 class Day11Test(unittest.TestCase):
     def test_day11(self):
-        seat_grid = [line.strip() for line in seat_data.split("\n") if len(line.strip()) > 0]
+        seat_grid = get_input_data_lines(seat_data)
         self.assertEqual(get_part1_answer(seat_grid), 37)
         self.assertEqual(get_part2_answer(seat_grid), 26)

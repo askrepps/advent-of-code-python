@@ -25,6 +25,7 @@ import unittest
 
 from advent2020.day9 import find_contiguous_sum
 from advent2020.day9 import find_invalid_number
+from advent2020.util import get_input_data_lines
 
 
 data = """
@@ -53,6 +54,6 @@ data = """
 
 class Day9Test(unittest.TestCase):
     def test_day9(self):
-        numbers = [int(line) for line in data.split("\n") if len(line.strip()) > 0]
+        numbers = [int(line) for line in get_input_data_lines(data)]
         self.assertEqual(find_invalid_number(numbers, 5), 127)
         self.assertListEqual(find_contiguous_sum(numbers, 127), [15, 25, 47, 40])

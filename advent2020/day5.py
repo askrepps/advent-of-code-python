@@ -56,8 +56,6 @@ def get_part2_answer(seat_ids):
 
 
 def run():
-    with open(util.get_input_file_path("day5.txt")) as f:
-        boarding_passes = [line.strip() for line in f if len(line) > 0]
-        seat_ids = [get_seat_id(bp) for bp in boarding_passes]
-        print(f"The answer to part 1 is {get_part1_answer(seat_ids)}")
-        print(f"The answer to part 2 is {get_part2_answer(seat_ids)}")
+    seat_ids = [get_seat_id(line) for line in util.get_input_file_lines("day5.txt")]
+    print(f"The answer to part 1 is {get_part1_answer(seat_ids)}")
+    print(f"The answer to part 2 is {get_part2_answer(seat_ids)}")

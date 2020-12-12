@@ -52,8 +52,7 @@ def get_part2_answer(numbers, invalid_num):
 
 
 def run():
-    with open(util.get_input_file_path("day9.txt")) as f:
-        numbers = [int(line) for line in f if len(line.strip()) > 0]
-        invalid_num = get_part1_answer(numbers)
-        print(f"The answer to part 1 is {invalid_num}")
-        print(f"The answer to part 2 is {get_part2_answer(numbers, invalid_num)}")
+    numbers = [int(line) for line in util.get_input_file_lines("day9.txt")]
+    invalid_num = get_part1_answer(numbers)
+    print(f"The answer to part 1 is {invalid_num}")
+    print(f"The answer to part 2 is {get_part2_answer(numbers, invalid_num)}")

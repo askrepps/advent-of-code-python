@@ -26,6 +26,7 @@ import unittest
 from advent2020.day8 import get_part1_answer
 from advent2020.day8 import get_part2_answer
 from advent2020.day8 import parse_instructions
+from advent2020.util import get_input_data_lines
 
 
 data = """
@@ -43,7 +44,7 @@ acc +6
 
 class Day8Test(unittest.TestCase):
     def test_day8(self):
-        lines = [line.strip() for line in data.split("\n") if len(line.strip()) > 0]
+        lines = get_input_data_lines(data)
         instructions = parse_instructions(lines)
         self.assertEqual(get_part1_answer(instructions), 5)
         self.assertEqual(get_part2_answer(instructions), 8)

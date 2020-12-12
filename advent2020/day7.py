@@ -72,8 +72,6 @@ def get_part2_answer(bag_to_child_map):
 
 
 def run():
-    with open(util.get_input_file_path("day7.txt")) as f:
-        lines = [line.strip() for line in f]
-        bag_to_child, bag_to_parent = parse_bag_rules(lines)
-        print(f"The answer to part 1 is {get_part1_answer(bag_to_parent)}")
-        print(f"The answer to part 2 is {get_part2_answer(bag_to_child)}")
+    bag_to_child, bag_to_parent = parse_bag_rules(util.get_input_file_lines("day7.txt"))
+    print(f"The answer to part 1 is {get_part1_answer(bag_to_parent)}")
+    print(f"The answer to part 2 is {get_part2_answer(bag_to_child)}")

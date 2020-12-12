@@ -26,24 +26,28 @@ import unittest
 from advent2020.day3 import get_part1_answer
 from advent2020.day3 import get_part2_answer
 from advent2020.day3 import load_trees
+from advent2020.util import get_input_data_lines
+
+
+tree_data = """
+..##.......
+#...#...#..
+.#....#..#.
+..#.#...#.#
+.#...##..#.
+..#.##.....
+.#.#.#....#
+.#........#
+#.##...#...
+#...##....#
+.#..#...#.#
+"""
 
 
 class Day3Test(unittest.TestCase):
     def test_day3(self):
-        tree_data = [
-            "..##.......\n",
-            "#...#...#..\n",
-            ".#....#..#.\n",
-            "..#.#...#.#\n",
-            ".#...##..#.\n",
-            "..#.##.....\n",
-            ".#.#.#....#\n",
-            ".#........#\n",
-            "#.##...#...\n",
-            "#...##....#\n",
-            ".#..#...#.#"
-        ]
-        tree_grid = load_trees(tree_data)
+        lines = get_input_data_lines(tree_data)
+        tree_grid = load_trees(lines)
         expected_grid = [
             [False, False, True, True, False, False, False, False, False, False, False],
             [True, False, False, False, True, False, False, False, True, False, False],

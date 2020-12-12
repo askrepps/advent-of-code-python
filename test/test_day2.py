@@ -27,15 +27,19 @@ from advent2020.day2 import parse_entries
 from advent2020.day2 import count_valid_passwords
 from advent2020.day2 import password_is_valid_for_part1
 from advent2020.day2 import password_is_valid_for_part2
+from advent2020.util import get_input_data_lines
+
+
+password_data = """
+1-3 a: abcde
+1-3 b: cdefg
+2-9 c: ccccccccc
+"""
 
 
 class Day2Test(unittest.TestCase):
     def test_day2(self):
-        lines = [
-            "1-3 a: abcde",
-            "1-3 b: cdefg",
-            "2-9 c: ccccccccc"
-        ]
+        lines = get_input_data_lines(password_data)
         entries = parse_entries(lines)
         expected_entries = [
             {"password": "abcde", "letter": "a", "min": 1, "max": 3},

@@ -25,6 +25,7 @@ import unittest
 
 from advent2020.day10 import get_part1_answer
 from advent2020.day10 import get_part2_answer
+from advent2020.util import get_input_data_lines
 
 
 adapter_data1 = """
@@ -82,6 +83,6 @@ class Day10Test(unittest.TestCase):
         self.run_day10_test(adapter_data2, 220, 19208)
 
     def run_day10_test(self, data, expected_part1, expected_part2):
-        adapters = [int(line) for line in data.split("\n") if len(line.strip()) > 0]
+        adapters = [int(line) for line in get_input_data_lines(data)]
         self.assertEqual(get_part1_answer(adapters), expected_part1)
         self.assertEqual(get_part2_answer(adapters), expected_part2)

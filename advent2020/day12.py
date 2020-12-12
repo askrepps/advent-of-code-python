@@ -113,8 +113,6 @@ def get_part2_answer(commands):
 
 
 def run():
-    with open(util.get_input_file_path("day12.txt")) as f:
-        lines = [line.strip() for line in f if len(line.strip()) > 0]
-        commands = parse_commands(lines)
-        print(f"The answer to part 1 is {get_part1_answer(commands)}")
-        print(f"The answer to part 2 is {get_part2_answer(commands)}")
+    commands = parse_commands(util.get_input_file_lines("day12.txt"))
+    print(f"The answer to part 1 is {get_part1_answer(commands)}")
+    print(f"The answer to part 2 is {get_part2_answer(commands)}")

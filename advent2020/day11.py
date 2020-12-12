@@ -81,7 +81,6 @@ def get_part2_answer(seat_grid):
 
 
 def run():
-    with open(util.get_input_file_path("day11.txt")) as f:
-        seat_grid = [line.strip() for line in f if len(line.strip()) > 0]
-        print(f"The answer to part 1 is {get_part1_answer(seat_grid)}")
-        print(f"The answer to part 2 is {get_part2_answer(seat_grid)}")
+    seat_grid = util.get_input_file_lines("day11.txt")
+    print(f"The answer to part 1 is {get_part1_answer(seat_grid)}")
+    print(f"The answer to part 2 is {get_part2_answer(seat_grid)}")

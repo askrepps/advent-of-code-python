@@ -68,7 +68,6 @@ def get_part2_answer(adapters):
 
 
 def run():
-    with open(util.get_input_file_path("day10.txt")) as f:
-        adapters = [int(line) for line in f if len(line.strip()) > 0]
-        print(f"The answer to part 1 is {get_part1_answer(adapters)}")
-        print(f"The answer to part 2 is {get_part2_answer(adapters)}")
+    adapters = [int(line) for line in util.get_input_file_lines("day10.txt")]
+    print(f"The answer to part 1 is {get_part1_answer(adapters)}")
+    print(f"The answer to part 2 is {get_part2_answer(adapters)}")

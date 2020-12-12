@@ -26,6 +26,7 @@ import unittest
 from advent2020.day7 import get_part1_answer
 from advent2020.day7 import get_part2_answer
 from advent2020.day7 import parse_bag_rules
+from advent2020.util import get_input_data_lines
 
 
 bag_data1 = """
@@ -53,11 +54,11 @@ dark violet bags contain no other bags.
 
 class Day7Test(unittest.TestCase):
     def test_day7_part1(self):
-        lines = [line.strip() for line in bag_data1.split("\n") if len(line.strip()) > 0]
+        lines = get_input_data_lines(bag_data1)
         _, bag_to_parent = parse_bag_rules(lines)
         self.assertEqual(get_part1_answer(bag_to_parent), 4)
 
     def test_day7_part2(self):
-        lines = [line.strip() for line in bag_data2.split("\n") if len(line.strip()) > 0]
+        lines = get_input_data_lines(bag_data2)
         bag_to_child, _ = parse_bag_rules(lines)
         self.assertEqual(get_part2_answer(bag_to_child), 126)

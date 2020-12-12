@@ -68,7 +68,6 @@ def get_part2_answer(entries):
 
 
 def run():
-    with open(util.get_input_file_path("day2.txt")) as f:
-        entries = parse_entries([line for line in f if len(line) > 0])
-        print(f"The answer to part 1 is {get_part1_answer(entries)}")
-        print(f"The answer to part 2 is {get_part2_answer(entries)}")
+    entries = parse_entries(util.get_input_file_lines("day2.txt"))
+    print(f"The answer to part 1 is {get_part1_answer(entries)}")
+    print(f"The answer to part 2 is {get_part2_answer(entries)}")
