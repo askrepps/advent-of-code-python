@@ -52,7 +52,7 @@ data = """
 
 
 class Day9Test(unittest.TestCase):
-    def test_day9_part1(self):
+    def test_day9(self):
         numbers = [int(line) for line in data.split("\n") if len(line.strip()) > 0]
         self.assertEqual(find_invalid_number(numbers, 5), 127)
         self.assertListEqual(find_contiguous_sum(numbers, 127), [15, 25, 47, 40])
