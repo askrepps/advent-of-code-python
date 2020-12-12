@@ -51,7 +51,7 @@ def count_adjacent_filled_seats(grid, row, col, search_lim):
 
 def run_seat_simulation(seat_grid, search_lim, vacate_threshold):
     grid1 = [[cell for cell in row] for row in seat_grid]
-    grid2 = [['X' for col in row] for row in grid1]
+    grid2 = [['X' for _ in row] for row in grid1]
     while grid1 != grid2:
         for row in range(len(grid1)):
             for col in range(len(grid1[0])):
