@@ -72,5 +72,5 @@ def advent2020_main(args):
         raise_day_input_error(day, max_day)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     advent2020_main(sys.argv[1:])
