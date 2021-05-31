@@ -38,6 +38,7 @@ from advent2020 import day12
 from advent2020 import day13
 from advent2020 import day14
 from advent2020 import day15
+from advent2020 import day16
 
 
 day_runners = [
@@ -55,7 +56,8 @@ day_runners = [
     lambda: day12.run(),
     lambda: day13.run(),
     lambda: day14.run(),
-    lambda: day15.run()
+    lambda: day15.run(),
+    lambda: day16.run()
 ]
 
 
