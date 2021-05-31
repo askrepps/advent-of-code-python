@@ -21,6 +21,7 @@
 # SOFTWARE.
 
 
+import datetime
 import os
 import sys
 
@@ -48,9 +49,14 @@ def generate_code_for_day(day):
 
     with open(os.path.join("templates", "license.template")) as license_f:
         var_map = {
-            "license": license_f.read(),
+            "advent_year": "2020",
+            "date_year": str(datetime.datetime.now().year),
             "day": str(day)
         }
+
+        license_template = license_f.read()
+        var_map["license"] = substitute_vars(license_template, var_map)
+
         gen_file_from_template(os.path.join("templates", "day.template"), day_file_path, var_map)
         gen_file_from_template(os.path.join("templates", "test.template"), test_file_path, var_map)
 
