@@ -42,4 +42,4 @@ class Day18Test(unittest.TestCase):
     def test_day18(self):
         lines = get_input_data_lines(data)
         self.assertEqual(get_part1_answer(lines), sum([71, 51, 26, 437, 12240, 13632]))
-        self.assertEqual(get_part2_answer(lines), None)
+        self.assertEqual(get_part2_answer(lines), sum([231, 51, 46, 1445, 669060, 23340]))

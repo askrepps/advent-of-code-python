@@ -31,20 +31,77 @@ class Operation(Enum):
     MULTIPLY = 2
 
 
-def apply_operation(lhs, rhs, op):
-    if op == Operation.ADD:
-        return lhs + rhs
-    elif op == Operation.MULTIPLY:
-        return lhs * rhs
-    else:
-        raise ValueError("Unsupported operation")
+class NodeType(Enum):
+    NUMBER = 1
+    OPERATION = 2
 
 
-def evaluate_expression(expression):
-    result = None
-    current_op = None
+class ExpressionNode:
+    def __init__(self, node_type, data):
+        self.node_type = node_type
+        self.data = data
+        self.left = None
+        self.right = None
+
+    def evaluate(self):
+        if self.data == Operation.ADD:
+            return self.left.evaluate() + self.right.evaluate()
+        elif self.data == Operation.MULTIPLY:
+            return self.left.evaluate() * self.right.evaluate()
+        else:
+            return self.data
+
+    def __repr__(self):
+        if self.data == Operation.ADD:
+            return '+'
+        elif self.data == Operation.MULTIPLY:
+            return '*'
+        else:
+            return str(self.data)
+
+
+def build_expression_tree(nodes, precedence_map):
+    root = None
+    idx = 0
+    while idx < len(nodes):
+        if root is None:
+            root = nodes[idx]
+            idx += 1
+        else:
+            assert idx < len(nodes) - 1
+
+            op_node = nodes[idx]
+            assert op_node.node_type == NodeType.OPERATION
+
+            rhs_node = nodes[idx + 1]
+            assert rhs_node.node_type == NodeType.NUMBER
+
+            op_node.right = rhs_node
+
+            search_node = root
+            search_parent = None
+            searching = True
+            while searching:
+                if search_node.node_type == NodeType.NUMBER or \
+                        precedence_map[search_node.data] <= precedence_map[op_node.data]:
+                    if search_node == root:
+                        root = op_node
+                    elif search_parent is not None:
+                        search_parent.right = op_node
+                    op_node.left = search_node
+                    searching = False
+                search_parent = search_node
+                search_node = search_parent.right
+
+            idx += 2
+
+    return root
+
+
+def evaluate_expression(expression, precedence_map):
     number_acc = ''
     skip_count = 0
+    nodes = []
     for idx, c in enumerate(expression + ' '):
         if skip_count > 0:
             skip_count -= 1
@@ -53,34 +110,35 @@ def evaluate_expression(expression):
         if '0' <= c <= '9':
             number_acc += c
         elif number_acc != '':
-            number = int(number_acc)
+            nodes.append(ExpressionNode(NodeType.NUMBER, int(number_acc)))
             number_acc = ''
-            if result is None:
-                result = number
-            else:
-                result = apply_operation(result, number, current_op)
-
         if c == '(':
-            sub_result, skip_count = evaluate_expression(expression[idx + 1:])
-            if result is None:
-                result = sub_result
-            else:
-                result = apply_operation(result, sub_result, current_op)
+            sub_result, skip_count = evaluate_expression(expression[idx + 1:], precedence_map)
+            nodes.append(ExpressionNode(NodeType.NUMBER, sub_result))
         elif c == ')':
-            return result, idx + 1
+            return build_expression_tree(nodes, precedence_map).evaluate(), idx + 1
         elif c == '+':
-            current_op = Operation.ADD
+            nodes.append(ExpressionNode(NodeType.OPERATION, Operation.ADD))
         elif c == '*':
-            current_op = Operation.MULTIPLY
-    return result, 0
+            nodes.append(ExpressionNode(NodeType.OPERATION, Operation.MULTIPLY))
+
+    return build_expression_tree(nodes, precedence_map).evaluate(), 0
 
 
 def get_part1_answer(lines):
-    return sum(evaluate_expression(line)[0] for line in lines)
+    precedence_map = {
+        Operation.ADD: 1,
+        Operation.MULTIPLY: 1
+    }
+    return sum(evaluate_expression(line, precedence_map)[0] for line in lines)
 
 
 def get_part2_answer(lines):
-    return None
+    precedence_map = {
+        Operation.ADD: 1,
+        Operation.MULTIPLY: 2
+    }
+    return sum(evaluate_expression(line, precedence_map)[0] for line in lines)
 
 
 def run():
