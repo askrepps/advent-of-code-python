@@ -24,16 +24,49 @@
 import itertools
 import math
 
+from enum import Enum
+
 from . import util
 
 
+BOOL_VALUES = [False, True]
+
+
+class Direction(Enum):
+    UP = 0
+    DOWN = 1
+    LEFT = 2
+    RIGHT = 3
+
+
 class TransformedTile:
-    def __init__(self, tile_data, row_col_swapped=False, row_reversed=False, col_reversed=False):
+    def __init__(self, tile_id, tile_data, row_col_swapped=False, row_reversed=False, col_reversed=False):
+        self.id = tile_id
         self.tile_data = tile_data
         self.tile_size = len(tile_data)
         self.row_col_swapped = row_col_swapped
         self.row_reversed = row_reversed
         self.col_reversed = col_reversed
+
+        my_up = Direction.UP
+        my_down = Direction.DOWN
+        my_left = Direction.LEFT
+        my_right = Direction.RIGHT
+
+        if self.row_reversed:
+            my_up, my_down = my_down, my_up
+        if self.col_reversed:
+            my_left, my_right = my_right, my_left
+        if self.row_col_swapped:
+            my_up, my_left = my_left, my_up
+            my_down, my_right = my_right, my_down
+
+        self.transformed_directions = {
+            Direction.UP: my_up,
+            Direction.DOWN: my_down,
+            Direction.LEFT: my_left,
+            Direction.RIGHT: my_right
+        }
 
     def __getitem__(self, coordinates):
         row, col = coordinates
@@ -45,6 +78,9 @@ class TransformedTile:
             input_col = self.tile_size - input_col - 1
         return self.tile_data[input_row][input_col]
 
+    def transform_direction(self, direction):
+        return self.transformed_directions[direction]
+
 
 def parse_input(lines):
     tiles = {}
@@ -53,14 +89,15 @@ def parse_input(lines):
     for line in lines:
         if line.startswith("Tile"):
             if len(rows) > 0:
-                tiles[tile_id] = TransformedTile(rows)
+                tiles[tile_id] = TransformedTile(tile_id, rows)
             tile_id = int(line[5:line.index(':')])
             rows = []
         else:
             rows.append(line.strip())
-    tiles[tile_id] = TransformedTile(rows)
+    tiles[tile_id] = TransformedTile(tile_id, rows)
 
     dim_length = int(math.sqrt(len(tiles)))
+    assert dim_length >= 2
     assert dim_length * dim_length == len(tiles)
 
     return tiles, dim_length
@@ -90,58 +127,120 @@ def verify_horizontal_tile_neighbors(left_tile, right_tile):
     return True
 
 
-def try_tile_insert(new_tile, arranged_tiles, dim_length):
-    bool_choices = [False, True]
-    possible_arrangements = []
-    for (row_col_swapped, row_reversed, col_reversed) in itertools.product(bool_choices, bool_choices, bool_choices):
-        transformed_tile = TransformedTile(new_tile.tile_data, row_col_swapped, row_reversed, col_reversed)
-        tile_row, tile_col = get_tile_coordinates(len(arranged_tiles), dim_length)
-        valid_arrangement = True
-        if valid_arrangement and tile_row > 0:
-            top_tile = arranged_tiles[get_tile_index(tile_row - 1, tile_col, dim_length)]
-            if not verify_vertical_tile_neighbors(top_tile, transformed_tile):
-                valid_arrangement = False
-        if valid_arrangement and tile_col > 0:
-            left_tile = arranged_tiles[get_tile_index(tile_row, tile_col - 1, dim_length)]
-            if not verify_horizontal_tile_neighbors(left_tile, transformed_tile):
-                valid_arrangement = False
-        if valid_arrangement:
-            possible_arrangements.append(transformed_tile)
-    return possible_arrangements
+def get_tile_adjacency(tile, other_tile):
+    adjacent_directions = set()
+    for (row_col_swapped, row_reversed, col_reversed) in itertools.product(BOOL_VALUES, BOOL_VALUES, BOOL_VALUES):
+        transformed_tile = TransformedTile(
+            other_tile.id, other_tile.tile_data, row_col_swapped, row_reversed, col_reversed
+        )
+        if verify_vertical_tile_neighbors(tile, transformed_tile):
+            adjacent_directions.add(Direction.DOWN)
+        if verify_vertical_tile_neighbors(transformed_tile, tile):
+            adjacent_directions.add(Direction.UP)
+        if verify_horizontal_tile_neighbors(tile, transformed_tile):
+            adjacent_directions.add(Direction.RIGHT)
+        if verify_horizontal_tile_neighbors(transformed_tile, tile):
+            adjacent_directions.add(Direction.LEFT)
+    return adjacent_directions
 
 
-def try_tile_positions(tile_positions, tiles, arranged_tiles, dim_length, idx=0):
-    if idx == len(tile_positions):
-        return True
-    tile = tiles[tile_positions[idx]]
-    for possible_arrangement in try_tile_insert(tile, arranged_tiles, dim_length):
-        if try_tile_positions(tile_positions, tiles, arranged_tiles + [possible_arrangement], dim_length, idx + 1):
-            return True
-    return False
+def build_tile_adjacency_lists(tiles):
+    adjacency_lists = {}
+    for tile_id, tile in tiles.items():
+        adjacency = {direction: [] for direction in Direction}
+        adjacency['num_directions'] = 0
+        for other_tile_id, other_tile in tiles.items():
+            if tile_id != other_tile_id:
+                for direction in get_tile_adjacency(tile, other_tile):
+                    if not adjacency[direction]:
+                        adjacency['num_directions'] += 1
+                    adjacency[direction].append(other_tile_id)
+        adjacency_lists[tile_id] = adjacency
+    return adjacency_lists
+
+
+def find_starting_tile(all_tiles, tile_adjacency_lists):
+    for tile_id in tile_adjacency_lists.keys():
+        adjacency = tile_adjacency_lists[tile_id]
+        if adjacency['num_directions'] == 2:
+            assert adjacency[Direction.UP] or adjacency[Direction.DOWN]
+            assert adjacency[Direction.RIGHT] or adjacency[Direction.LEFT]
+            row_reversed = len(adjacency[Direction.UP]) > 0
+            col_reversed = len(adjacency[Direction.LEFT]) > 0
+            return TransformedTile(
+                tile_id=tile_id,
+                tile_data=all_tiles[tile_id].tile_data,
+                row_col_swapped=False,
+                row_reversed=row_reversed,
+                col_reversed=col_reversed
+            )
+    raise RuntimeError("Upper-left tile not found")
+
+
+def try_tile_insert(all_tiles, arranged_tiles, tile_adjacency_lists, dim_length):
+    idx = len(arranged_tiles)
+    if len(all_tiles) == idx:
+        return True, arranged_tiles
+
+    row, col = get_tile_coordinates(idx, dim_length)
+    top_tile = None
+    left_tile = None
+    top_tile_constraints = None
+    left_tile_constraints = None
+    if row > 0:
+        top_tile = arranged_tiles[idx - dim_length]
+        top_tile_constraints = set(tile_adjacency_lists[top_tile.id][top_tile.transform_direction(Direction.DOWN)])
+    if col > 0:
+        left_tile = arranged_tiles[idx - 1]
+        left_tile_constraints = set(tile_adjacency_lists[left_tile.id][left_tile.transform_direction(Direction.RIGHT)])
+
+    assert top_tile_constraints is not None or left_tile_constraints is not None
+
+    if top_tile_constraints is None:
+        possible_tile_ids = left_tile_constraints
+    elif left_tile_constraints is None:
+        possible_tile_ids = top_tile_constraints
+    else:
+        possible_tile_ids = top_tile_constraints.intersection(left_tile_constraints)
+
+    possible_tile_ids.difference_update(set(tile.id for tile in arranged_tiles))
+
+    for tile_id in possible_tile_ids:
+        for (row_col_swapped, row_reversed, col_reversed) in itertools.product(BOOL_VALUES, BOOL_VALUES, BOOL_VALUES):
+            transformed_tile = TransformedTile(
+                tile_id, all_tiles[tile_id].tile_data, row_col_swapped, row_reversed, col_reversed
+            )
+            if top_tile is not None and not verify_vertical_tile_neighbors(top_tile, transformed_tile):
+                continue
+            if left_tile is not None and not verify_horizontal_tile_neighbors(left_tile, transformed_tile):
+                continue
+
+            result, final_arrangement = try_tile_insert(
+                all_tiles, arranged_tiles + [transformed_tile], tile_adjacency_lists, dim_length
+            )
+            if result:
+                return True, final_arrangement
+
+    return False, []
 
 
 def arrange_tiles(tiles, dim_length):
-    permutations = list(itertools.permutations(tiles.keys()))
-    total_permutations = len(permutations)
-    count = 0
-    for tile_positions in permutations:
-        count += 1
-        if count % 10 == 0:
-            print(count / total_permutations * 100)
-        arranged_tile_data = []
-        if try_tile_positions(tile_positions, tiles, arranged_tile_data, dim_length):
-            return tile_positions
-
-    raise RuntimeError("No arrangement possible")
+    tile_adjacency_lists = build_tile_adjacency_lists(tiles)
+    arranged_tiles = [find_starting_tile(tiles, tile_adjacency_lists)]
+    result, arranged_tiles = try_tile_insert(tiles, arranged_tiles, tile_adjacency_lists, dim_length)
+    if result:
+        return arranged_tiles
+    else:
+        raise RuntimeError("Tiles could not be arranged")
 
 
 def get_part1_answer(lines):
     tiles, dim_length = parse_input(lines)
-    arranged_tile_ids = arrange_tiles(tiles, dim_length)
-    ul_tile_id = arranged_tile_ids[0]
-    ur_tile_id = arranged_tile_ids[get_tile_index(0, dim_length - 1, dim_length)]
-    ll_tile_id = arranged_tile_ids[get_tile_index(dim_length - 1, 0, dim_length)]
-    lr_tile_id = arranged_tile_ids[get_tile_index(dim_length - 1, dim_length - 1, dim_length)]
+    arranged_tiles = arrange_tiles(tiles, dim_length)
+    ul_tile_id = arranged_tiles[0].id
+    ur_tile_id = arranged_tiles[get_tile_index(0, dim_length - 1, dim_length)].id
+    ll_tile_id = arranged_tiles[get_tile_index(dim_length - 1, 0, dim_length)].id
+    lr_tile_id = arranged_tiles[get_tile_index(dim_length - 1, dim_length - 1, dim_length)].id
     return ul_tile_id * ur_tile_id * ll_tile_id * lr_tile_id
 
 
