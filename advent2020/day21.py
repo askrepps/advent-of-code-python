@@ -51,10 +51,10 @@ def get_ingredient_appearances_by_allergen(foods, all_allergens):
     return ingredients_by_allergen
 
 
-def get_allergens_by_ingredient(foods, all_ingredients, all_allergens):
+def get_ingredients_by_allergen(foods, all_ingredients, all_allergens):
     my_ingredients = set(all_ingredients)
     my_allergens = set(all_allergens)
-    ingredient_allergens = {ingredient: None for ingredient in my_ingredients}
+    ingredient_by_allergen = {}
     searching = True
     while searching:
         searching = False
@@ -65,12 +65,12 @@ def get_allergens_by_ingredient(foods, all_ingredients, all_allergens):
                     possible_ingredients.intersection_update(food_ingredients)
             if len(possible_ingredients) == 1:
                 ingredient = possible_ingredients.pop()
-                ingredient_allergens[ingredient] = allergen
+                ingredient_by_allergen[allergen] = ingredient
                 my_ingredients.remove(ingredient)
                 my_allergens.remove(allergen)
                 searching = True
                 break
-    return ingredient_allergens
+    return ingredient_by_allergen
 
 
 def count_ingredient_appearances(foods, ingredients):
@@ -82,20 +82,20 @@ def count_ingredient_appearances(foods, ingredients):
     return count
 
 
-def get_part1_answer(lines):
-    foods = parse_input(lines)
-    all_ingredients = get_all_ingredients(foods)
-    all_allergens = get_all_allergens(foods)
-    allergens_by_ingredient = get_allergens_by_ingredient(foods, all_ingredients, all_allergens)
-    safe_ingredients = [ingredient for ingredient, allergen in allergens_by_ingredient.items() if allergen is None]
+def get_part1_answer(foods, all_ingredients, ingredient_by_allergen):
+    safe_ingredients = all_ingredients.difference(ingredient_by_allergen.values())
     return count_ingredient_appearances(foods, safe_ingredients)
 
 
-def get_part2_answer(lines):
-    return None
+def get_part2_answer(ingredient_by_allergen):
+    return ','.join(ingredient_by_allergen[allergen] for allergen in sorted(ingredient_by_allergen.keys()))
 
 
 def run():
     lines = util.get_input_file_lines("day21.txt")
-    print(f"The answer to part 1 is {get_part1_answer(lines)}")
-    print(f"The answer to part 2 is {get_part2_answer(lines)}")
+    foods = parse_input(lines)
+    all_ingredients = get_all_ingredients(foods)
+    all_allergens = get_all_allergens(foods)
+    ingredient_by_allergen = get_ingredients_by_allergen(foods, all_ingredients, all_allergens)
+    print(f"The answer to part 1 is {get_part1_answer(foods, all_ingredients, ingredient_by_allergen)}")
+    print(f"The answer to part 2 is {get_part2_answer(ingredient_by_allergen)}")
