@@ -23,8 +23,10 @@
 
 import unittest
 
+from advent2020.day20 import arrange_tiles
 from advent2020.day20 import get_part1_answer
 from advent2020.day20 import get_part2_answer
+from advent2020.day20 import parse_input
 from advent2020.util import get_input_data_lines
 
 
@@ -142,5 +144,7 @@ Tile 3079:
 class Day20Test(unittest.TestCase):
     def test_day20(self):
         lines = get_input_data_lines(data)
-        self.assertEqual(get_part1_answer(lines), 20899048083289)
-        self.assertEqual(get_part2_answer(lines), None)
+        tiles, dim_length = parse_input(lines)
+        arranged_tiles = arrange_tiles(tiles, dim_length)
+        self.assertEqual(get_part1_answer(arranged_tiles, dim_length), 20899048083289)
+        self.assertEqual(get_part2_answer(arranged_tiles, dim_length), 273)

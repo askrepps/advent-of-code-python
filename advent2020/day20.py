@@ -234,9 +234,59 @@ def arrange_tiles(tiles, dim_length):
         raise RuntimeError("Tiles could not be arranged")
 
 
-def get_part1_answer(lines):
-    tiles, dim_length = parse_input(lines)
-    arranged_tiles = arrange_tiles(tiles, dim_length)
+def get_composite_image_data(arranged_tiles, dim_length):
+    inner_tile_size = len(arranged_tiles[0].tile_data) - 2
+    composite_image_size = inner_tile_size * dim_length
+    composite_image_data = []
+    for composite_row in range(composite_image_size):
+        tile_grid_row = composite_row // inner_tile_size
+        tile_cell_row = composite_row % inner_tile_size + 1
+        composite_row_data = []
+        for composite_col in range(composite_image_size):
+            tile_grid_col = composite_col // inner_tile_size
+            tile_cell_col = composite_col % inner_tile_size + 1
+            tile_idx = get_tile_index(tile_grid_row, tile_grid_col, dim_length)
+            composite_row_data.append(arranged_tiles[tile_idx][tile_cell_row, tile_cell_col])
+        composite_image_data.append(composite_row_data)
+    return composite_image_data
+
+
+def calc_sea_roughness(composite_image_data):
+    #              1111111111
+    #    01234567890123456789
+    #   +--------------------
+    # 0 |                  #
+    # 1 |#    ##    ##    ###
+    # 2 | #  #  #  #  #  #
+    sea_monster_pattern = [
+        (0, 18),
+        (1, 0), (1, 5), (1, 6), (1, 11), (1, 12), (1, 17), (1, 18), (1, 19),
+        (2, 1), (2, 4), (2, 7), (2, 10), (2, 13), (2, 16),
+    ]
+    composite_size = len(composite_image_data)
+    roughness_results = []
+    for (row_col_swapped, row_reversed, col_reversed) in itertools.product(BOOL_VALUES, BOOL_VALUES, BOOL_VALUES):
+        transformed_image = TransformedTile(0, composite_image_data, row_col_swapped, row_reversed, col_reversed)
+        sea_monster_cells = set()
+        symbol_count = 0
+        for row in range(composite_size):
+            for col in range(composite_size):
+                if transformed_image[row, col] == '#':
+                    symbol_count += 1
+                if row < composite_size - 3 and col < composite_size - 20:
+                    found_monster = True
+                    for row_offset, col_offset in sea_monster_pattern:
+                        if transformed_image[row + row_offset, col + col_offset] != '#':
+                            found_monster = False
+                            break
+                    if found_monster:
+                        for row_offset, col_offset in sea_monster_pattern:
+                            sea_monster_cells.add((row + row_offset, col + col_offset))
+        roughness_results.append(symbol_count - len(sea_monster_cells))
+    return min(roughness_results)
+
+
+def get_part1_answer(arranged_tiles, dim_length):
     ul_tile_id = arranged_tiles[0].id
     ur_tile_id = arranged_tiles[get_tile_index(0, dim_length - 1, dim_length)].id
     ll_tile_id = arranged_tiles[get_tile_index(dim_length - 1, 0, dim_length)].id
@@ -244,11 +294,13 @@ def get_part1_answer(lines):
     return ul_tile_id * ur_tile_id * ll_tile_id * lr_tile_id
 
 
-def get_part2_answer(lines):
-    return None
+def get_part2_answer(arranged_tiles, dim_length):
+    return calc_sea_roughness(get_composite_image_data(arranged_tiles, dim_length))
 
 
 def run():
     lines = util.get_input_file_lines("day20.txt")
-    print(f"The answer to part 1 is {get_part1_answer(lines)}")
-    print(f"The answer to part 2 is {get_part2_answer(lines)}")
+    tiles, dim_length = parse_input(lines)
+    arranged_tiles = arrange_tiles(tiles, dim_length)
+    print(f"The answer to part 1 is {get_part1_answer(arranged_tiles, dim_length)}")
+    print(f"The answer to part 2 is {get_part2_answer(arranged_tiles, dim_length)}")
