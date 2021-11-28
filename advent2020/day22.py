@@ -19,7 +19,8 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-
+import copy
+import sys
 
 from . import util
 
@@ -45,24 +46,61 @@ def calculate_score(deck):
     return score
 
 
-def play_game(all_decks):
+def deal_cards(all_decks):
+    return [(player_idx, deck.pop()) for player_idx, deck in enumerate(all_decks) if deck]
+
+
+def give_cards_to_winner(all_decks, played_cards, winning_player_idx=None):
+    def sort_key(x, idx=winning_player_idx): return sys.maxsize if x[0] == idx else x[1]
+    sorted_cards = sorted(played_cards, key=sort_key, reverse=True)
+    if winning_player_idx is None:
+        winning_player_idx = sorted_cards[0][0]
+    for _, card in sorted_cards:
+        all_decks[winning_player_idx].insert(0, card)
+
+
+def serialize_deck_state(all_decks):
+    return '|'.join(','.join(str(card) for card in deck) for deck in all_decks)
+
+
+def play_game(all_decks, allow_recursion=False, encountered_deck_states=None):
+    if encountered_deck_states is None:
+        encountered_deck_states = set()
     num_cards = sum(len(deck) for deck in all_decks)
     while max(len(deck) for deck in all_decks) < num_cards:
-        played_cards = [(player_idx, deck.pop()) for player_idx, deck in enumerate(all_decks) if deck]
-        played_cards.sort(key=lambda x: x[1], reverse=True)
-        winning_player_idx = played_cards[0][0]
-        for _, card in played_cards:
-            all_decks[winning_player_idx].insert(0, card)
-    return max(calculate_score(deck) for deck in all_decks)
+        state = serialize_deck_state(all_decks)
+        if state in encountered_deck_states:
+            # player 1 wins
+            return 0, calculate_score(all_decks[0])
+        encountered_deck_states.add(state)
+        played_cards = deal_cards(all_decks)
+        should_recurse = allow_recursion
+        if allow_recursion:
+            for player_idx, card in played_cards:
+                if len(all_decks[player_idx]) < card:
+                    should_recurse = False
+                    break
+        if should_recurse:
+            sub_decks = copy.deepcopy(all_decks)
+            for player_idx, card in played_cards:
+                sub_decks[player_idx] = sub_decks[player_idx][-card:]
+            winning_player_idx, _ = play_game(sub_decks, encountered_deck_states)
+            give_cards_to_winner(all_decks, played_cards, winning_player_idx)
+        else:
+            give_cards_to_winner(all_decks, played_cards)
+    for player_idx, deck in enumerate(all_decks):
+        if deck:
+            return player_idx, calculate_score(deck)
 
 
 def get_part1_answer(lines):
     all_decks = parse_input(lines)
-    return play_game(all_decks)
+    return play_game(all_decks)[1]
 
 
 def get_part2_answer(lines):
-    return None
+    all_decks = parse_input(lines)
+    return play_game(all_decks, allow_recursion=True)[1]
 
 
 def run():

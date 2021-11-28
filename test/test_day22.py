@@ -49,4 +49,4 @@ class Day22Test(unittest.TestCase):
     def test_day22(self):
         lines = get_input_data_lines(data)
         self.assertEqual(get_part1_answer(lines), 306)
-        self.assertEqual(get_part2_answer(lines), None)
+        self.assertEqual(get_part2_answer(lines), 291)
