@@ -19,7 +19,8 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-import copy
+
+
 import sys
 
 from . import util
@@ -81,9 +82,9 @@ def play_game(all_decks, allow_recursion=False, encountered_deck_states=None):
                     should_recurse = False
                     break
         if should_recurse:
-            sub_decks = copy.deepcopy(all_decks)
+            sub_decks = []
             for player_idx, card in played_cards:
-                sub_decks[player_idx] = sub_decks[player_idx][-card:]
+                sub_decks.append(all_decks[player_idx][-card:])
             winning_player_idx, _ = play_game(sub_decks, encountered_deck_states)
             give_cards_to_winner(all_decks, played_cards, winning_player_idx)
         else:
