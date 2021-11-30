@@ -21,33 +21,41 @@
 # SOFTWARE.
 
 
-import unittest
-
-from advent2020.day6 import get_part1_answer
-from advent2020.day6 import get_part2_answer
+from . import util
 
 
-answer_data = """
-abc
-
-a
-b
-c
-
-ab
-ac
-
-a
-a
-a
-a
-
-b
-"""
+def code_to_num(code, high_symbol):
+    num = 0
+    for idx, c in enumerate(code):
+        if c == high_symbol:
+            num += 2**(len(code) - idx - 1)
+    return num
 
 
-class Day6Test(unittest.TestCase):
-    def test_day6(self):
-        all_group_answers = [group.strip() for group in answer_data.split("\n\n")]
-        self.assertEqual(get_part1_answer(all_group_answers), 11)
-        self.assertEqual(get_part2_answer(all_group_answers), 6)
+def get_seat_row_col(boarding_pass):
+    row_code = boarding_pass[:7]
+    column_code = boarding_pass[7:]
+    return code_to_num(row_code, "B"), code_to_num(column_code, "R")
+
+
+def get_seat_id(boarding_pass):
+    row, col = get_seat_row_col(boarding_pass)
+    return row*8 + col
+
+
+def get_part1_answer(seat_ids):
+    return max(seat_ids)
+
+
+def get_part2_answer(seat_ids):
+    sorted_ids = sorted(seat_ids)
+    for idx in range(len(sorted_ids) - 1):
+        if sorted_ids[idx] + 1 == sorted_ids[idx + 1] - 1:
+            return sorted_ids[idx] + 1
+    return None
+
+
+def run():
+    seat_ids = [get_seat_id(line) for line in util.get_input_file_lines("day05.txt")]
+    print(f"The answer to part 1 is {get_part1_answer(seat_ids)}")
+    print(f"The answer to part 2 is {get_part2_answer(seat_ids)}")

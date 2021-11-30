@@ -21,30 +21,34 @@
 # SOFTWARE.
 
 
-import unittest
-
-from advent2020.day8 import get_part1_answer
-from advent2020.day8 import get_part2_answer
-from advent2020.day8 import parse_instructions
-from advent2020.util import get_input_data_lines
+from . import util
 
 
-data = """
-nop +0
-acc +1
-jmp +4
-acc +3
-jmp -3
-acc -99
-acc +1
-jmp -4
-acc +6
-"""
+all_letters = {chr(c) for c in range(ord('a'), ord('z') + 1)}
 
 
-class Day8Test(unittest.TestCase):
-    def test_day8(self):
-        lines = get_input_data_lines(data)
-        instructions = parse_instructions(lines)
-        self.assertEqual(get_part1_answer(instructions), 5)
-        self.assertEqual(get_part2_answer(instructions), 8)
+def get_unique_answers(answers):
+    return set([c for c in answers]).intersection(all_letters)
+
+
+def get_consistent_answers(group_answers):
+    individual_answers = group_answers.split("\n")
+    result = all_letters.copy() if len(individual_answers) > 0 else set()
+    for answers in individual_answers:
+        result.intersection_update(answers)
+    return result
+
+
+def get_part1_answer(all_group_answers):
+    return sum([len(get_unique_answers(group)) for group in all_group_answers])
+
+
+def get_part2_answer(all_group_answers):
+    return sum([len(get_consistent_answers(group)) for group in all_group_answers])
+
+
+def run():
+    with open(util.get_input_file_path("day06.txt")) as f:
+        all_group_answers = [group.strip() for group in f.read().split("\n\n")]
+        print(f"The answer to part 1 is {get_part1_answer(all_group_answers)}")
+        print(f"The answer to part 2 is {get_part2_answer(all_group_answers)}")

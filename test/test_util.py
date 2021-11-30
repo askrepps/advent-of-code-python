@@ -31,7 +31,7 @@ class UtilTest(unittest.TestCase):
         file_path = get_input_file_path('dummy.txt')
         expected_lines = [
             'Obtain input data for each day from the original source at https://adventofcode.com/2020\n',
-            'and save it in a txt file named after the corresponding day (day1.txt, day2.txt, etc.).\n'
+            'and save it in a txt file named after the corresponding day (day01.txt, day2.txt, etc.).\n'
         ]
         with open(file_path) as f:
             lines = [line for line in f]

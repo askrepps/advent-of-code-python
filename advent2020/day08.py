@@ -86,6 +86,6 @@ def get_part2_answer(instructions):
 
 
 def run():
-    instructions = parse_instructions(util.get_input_file_lines("day8.txt"))
+    instructions = parse_instructions(util.get_input_file_lines("day08.txt"))
     print(f"The answer to part 1 is {get_part1_answer(instructions)}")
     print(f"The answer to part 2 is {get_part2_answer(instructions)}")

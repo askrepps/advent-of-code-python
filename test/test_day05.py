@@ -21,39 +21,19 @@
 # SOFTWARE.
 
 
-from . import util
+import unittest
+
+from advent2020.day05 import get_seat_id
+from advent2020.day05 import get_seat_row_col
 
 
-def find_sum_pair(numbers, target):
-    """Find a pair of numbers from a list that sum to the target value"""
-    for ix, x in enumerate(numbers):
-        for iy, y in enumerate(numbers):
-            if ix != iy and x + y == target:
-                return x, y
-    return None
-
-
-def find_sum_triple(numbers, target):
-    """Find three numbers from a list that sum to the target value"""
-    for ix, x in enumerate(numbers):
-        for iy, y in enumerate(numbers):
-            for iz, z in enumerate(numbers):
-                if ix != iy and ix != iz and iy != iz and x + y + z == target:
-                    return x, y, z
-    return None
-
-
-def get_part1_answer(numbers):
-    pair = find_sum_pair(numbers, 2020)
-    return pair[0]*pair[1]
-
-
-def get_part2_answer(numbers):
-    triple = find_sum_triple(numbers, 2020)
-    return triple[0]*triple[1]*triple[2]
-
-
-def run():
-    numbers = [int(line) for line in util.get_input_file_lines("day1.txt")]
-    print(f"The answer to part 1 is {get_part1_answer(numbers)}")
-    print(f"The answer to part 2 is {get_part2_answer(numbers)}")
+class Day5Test(unittest.TestCase):
+    def test_day5(self):
+        self.assertEqual(get_seat_row_col("FBFBBFFRLR"), (44, 5))
+        self.assertEqual(get_seat_id("FBFBBFFRLR"), 357)
+        self.assertEqual(get_seat_row_col("BFFFBBFRRR"), (70, 7))
+        self.assertEqual(get_seat_id("BFFFBBFRRR"), 567)
+        self.assertEqual(get_seat_row_col("FFFBBBFRRR"), (14, 7))
+        self.assertEqual(get_seat_id("FFFBBBFRRR"), 119)
+        self.assertEqual(get_seat_row_col("BBFFBBFRLL"), (102, 4))
+        self.assertEqual(get_seat_id("BBFFBBFRLL"), 820)

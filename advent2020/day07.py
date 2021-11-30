@@ -72,6 +72,6 @@ def get_part2_answer(bag_to_child_map):
 
 
 def run():
-    bag_to_child, bag_to_parent = parse_bag_rules(util.get_input_file_lines("day7.txt"))
+    bag_to_child, bag_to_parent = parse_bag_rules(util.get_input_file_lines("day07.txt"))
     print(f"The answer to part 1 is {get_part1_answer(bag_to_parent)}")
     print(f"The answer to part 2 is {get_part2_answer(bag_to_child)}")

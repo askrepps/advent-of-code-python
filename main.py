@@ -23,15 +23,15 @@
 
 import sys
 
-from advent2020 import day1
-from advent2020 import day2
-from advent2020 import day3
-from advent2020 import day4
-from advent2020 import day5
-from advent2020 import day6
-from advent2020 import day7
-from advent2020 import day8
-from advent2020 import day9
+from advent2020 import day01
+from advent2020 import day02
+from advent2020 import day03
+from advent2020 import day04
+from advent2020 import day05
+from advent2020 import day06
+from advent2020 import day07
+from advent2020 import day08
+from advent2020 import day09
 from advent2020 import day10
 from advent2020 import day11
 from advent2020 import day12
@@ -48,15 +48,15 @@ from advent2020 import day22
 
 
 day_runners = [
-    lambda: day1.run(),
-    lambda: day2.run(),
-    lambda: day3.run(),
-    lambda: day4.run(),
-    lambda: day5.run(),
-    lambda: day6.run(),
-    lambda: day7.run(),
-    lambda: day8.run(),
-    lambda: day9.run(),
+    lambda: day01.run(),
+    lambda: day02.run(),
+    lambda: day03.run(),
+    lambda: day04.run(),
+    lambda: day05.run(),
+    lambda: day06.run(),
+    lambda: day07.run(),
+    lambda: day08.run(),
+    lambda: day09.run(),
     lambda: day10.run(),
     lambda: day11.run(),
     lambda: day12.run(),

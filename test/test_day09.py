@@ -23,17 +23,37 @@
 
 import unittest
 
-from advent2020.day5 import get_seat_id
-from advent2020.day5 import get_seat_row_col
+from advent2020.day09 import find_contiguous_sum
+from advent2020.day09 import find_invalid_number
+from advent2020.util import get_input_data_lines
 
 
-class Day5Test(unittest.TestCase):
-    def test_day5(self):
-        self.assertEqual(get_seat_row_col("FBFBBFFRLR"), (44, 5))
-        self.assertEqual(get_seat_id("FBFBBFFRLR"), 357)
-        self.assertEqual(get_seat_row_col("BFFFBBFRRR"), (70, 7))
-        self.assertEqual(get_seat_id("BFFFBBFRRR"), 567)
-        self.assertEqual(get_seat_row_col("FFFBBBFRRR"), (14, 7))
-        self.assertEqual(get_seat_id("FFFBBBFRRR"), 119)
-        self.assertEqual(get_seat_row_col("BBFFBBFRLL"), (102, 4))
-        self.assertEqual(get_seat_id("BBFFBBFRLL"), 820)
+data = """
+35
+20
+15
+25
+47
+40
+62
+55
+65
+95
+102
+117
+150
+182
+127
+219
+299
+277
+309
+576
+"""
+
+
+class Day9Test(unittest.TestCase):
+    def test_day9(self):
+        numbers = [int(line) for line in get_input_data_lines(data)]
+        self.assertEqual(find_invalid_number(numbers, 5), 127)
+        self.assertListEqual(find_contiguous_sum(numbers, 127), [15, 25, 47, 40])

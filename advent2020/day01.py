@@ -24,38 +24,36 @@
 from . import util
 
 
-def code_to_num(code, high_symbol):
-    num = 0
-    for idx, c in enumerate(code):
-        if c == high_symbol:
-            num += 2**(len(code) - idx - 1)
-    return num
-
-
-def get_seat_row_col(boarding_pass):
-    row_code = boarding_pass[:7]
-    column_code = boarding_pass[7:]
-    return code_to_num(row_code, "B"), code_to_num(column_code, "R")
-
-
-def get_seat_id(boarding_pass):
-    row, col = get_seat_row_col(boarding_pass)
-    return row*8 + col
-
-
-def get_part1_answer(seat_ids):
-    return max(seat_ids)
-
-
-def get_part2_answer(seat_ids):
-    sorted_ids = sorted(seat_ids)
-    for idx in range(len(sorted_ids) - 1):
-        if sorted_ids[idx] + 1 == sorted_ids[idx + 1] - 1:
-            return sorted_ids[idx] + 1
+def find_sum_pair(numbers, target):
+    """Find a pair of numbers from a list that sum to the target value"""
+    for ix, x in enumerate(numbers):
+        for iy, y in enumerate(numbers):
+            if ix != iy and x + y == target:
+                return x, y
     return None
 
 
+def find_sum_triple(numbers, target):
+    """Find three numbers from a list that sum to the target value"""
+    for ix, x in enumerate(numbers):
+        for iy, y in enumerate(numbers):
+            for iz, z in enumerate(numbers):
+                if ix != iy and ix != iz and iy != iz and x + y + z == target:
+                    return x, y, z
+    return None
+
+
+def get_part1_answer(numbers):
+    pair = find_sum_pair(numbers, 2020)
+    return pair[0]*pair[1]
+
+
+def get_part2_answer(numbers):
+    triple = find_sum_triple(numbers, 2020)
+    return triple[0]*triple[1]*triple[2]
+
+
 def run():
-    seat_ids = [get_seat_id(line) for line in util.get_input_file_lines("day5.txt")]
-    print(f"The answer to part 1 is {get_part1_answer(seat_ids)}")
-    print(f"The answer to part 2 is {get_part2_answer(seat_ids)}")
+    numbers = [int(line) for line in util.get_input_file_lines("day01.txt")]
+    print(f"The answer to part 1 is {get_part1_answer(numbers)}")
+    print(f"The answer to part 2 is {get_part2_answer(numbers)}")

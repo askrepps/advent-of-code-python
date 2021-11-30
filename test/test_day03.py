@@ -23,9 +23,9 @@
 
 import unittest
 
-from advent2020.day3 import get_part1_answer
-from advent2020.day3 import get_part2_answer
-from advent2020.day3 import load_trees
+from advent2020.day03 import get_part1_answer
+from advent2020.day03 import get_part2_answer
+from advent2020.day03 import load_trees
 from advent2020.util import get_input_data_lines
 
 

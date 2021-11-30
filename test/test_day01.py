@@ -23,37 +23,24 @@
 
 import unittest
 
-from advent2020.day9 import find_contiguous_sum
-from advent2020.day9 import find_invalid_number
-from advent2020.util import get_input_data_lines
+from advent2020.day01 import find_sum_pair
+from advent2020.day01 import find_sum_triple
 
 
-data = """
-35
-20
-15
-25
-47
-40
-62
-55
-65
-95
-102
-117
-150
-182
-127
-219
-299
-277
-309
-576
-"""
+class Day1Test(unittest.TestCase):
+    def test_day1_part1(self):
+        numbers = [1721, 979, 366, 299, 675, 1456]
+        pair = find_sum_pair(numbers, 2020)
+        self.assertEqual(len(pair), 2)
+        self.assertIn(1721, pair)
+        self.assertIn(299, pair)
+        self.assertEqual(pair[0]*pair[1], 514579)
 
-
-class Day9Test(unittest.TestCase):
-    def test_day9(self):
-        numbers = [int(line) for line in get_input_data_lines(data)]
-        self.assertEqual(find_invalid_number(numbers, 5), 127)
-        self.assertListEqual(find_contiguous_sum(numbers, 127), [15, 25, 47, 40])
+    def test_day1_part2(self):
+        numbers = [1721, 979, 366, 299, 675, 1456]
+        triple = find_sum_triple(numbers, 2020)
+        self.assertEqual(len(triple), 3)
+        self.assertIn(979, triple)
+        self.assertIn(366, triple)
+        self.assertIn(675, triple)
+        self.assertEqual(triple[0]*triple[1]*triple[2], 241861950)

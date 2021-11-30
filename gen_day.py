@@ -40,7 +40,8 @@ def gen_file_from_template(temp_path, out_path, var_map):
 
 
 def generate_code_for_day(day):
-    day_file_name = f"day{day}.py"
+    padded_day = f"{day:02d}"
+    day_file_name = f"day{padded_day}.py"
     day_file_path = os.path.join("advent2020", day_file_name)
     test_file_name = f"test_{day_file_name}"
     test_file_path = os.path.join("test", test_file_name)
@@ -51,7 +52,7 @@ def generate_code_for_day(day):
         var_map = {
             "advent_year": "2020",
             "date_year": str(datetime.datetime.now().year),
-            "day": str(day)
+            "day": padded_day
         }
 
         license_template = license_f.read()

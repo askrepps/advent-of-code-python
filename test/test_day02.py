@@ -21,38 +21,31 @@
 # SOFTWARE.
 
 
-from . import day1
-from . import util
+import unittest
+
+from advent2020.day02 import parse_entries
+from advent2020.day02 import count_valid_passwords
+from advent2020.day02 import password_is_valid_for_part1
+from advent2020.day02 import password_is_valid_for_part2
+from advent2020.util import get_input_data_lines
 
 
-def find_invalid_number(numbers, preamble_length):
-    for idx in range(preamble_length, len(numbers)):
-        num = numbers[idx]
-        if day1.find_sum_pair(numbers[idx - preamble_length:idx], num) is None:
-            return num
-    return None
+password_data = """
+1-3 a: abcde
+1-3 b: cdefg
+2-9 c: ccccccccc
+"""
 
 
-def find_contiguous_sum(numbers, target):
-    for length in range(2, len(numbers)):
-        for idx in range(len(numbers) - length + 1):
-            contiguous_range = numbers[idx:idx+length]
-            if sum(numbers[idx:idx+length]) == target:
-                return contiguous_range
-    return None
-
-
-def get_part1_answer(numbers):
-    return find_invalid_number(numbers, 25)
-
-
-def get_part2_answer(numbers, invalid_num):
-    contiguous_range = find_contiguous_sum(numbers, invalid_num)
-    return min(contiguous_range) + max(contiguous_range)
-
-
-def run():
-    numbers = [int(line) for line in util.get_input_file_lines("day9.txt")]
-    invalid_num = get_part1_answer(numbers)
-    print(f"The answer to part 1 is {invalid_num}")
-    print(f"The answer to part 2 is {get_part2_answer(numbers, invalid_num)}")
+class Day2Test(unittest.TestCase):
+    def test_day2(self):
+        lines = get_input_data_lines(password_data)
+        entries = parse_entries(lines)
+        expected_entries = [
+            {"password": "abcde", "letter": "a", "min": 1, "max": 3},
+            {"password": "cdefg", "letter": "b", "min": 1, "max": 3},
+            {"password": "ccccccccc", "letter": "c", "min": 2, "max": 9},
+        ]
+        self.assertListEqual(entries, expected_entries)
+        self.assertEqual(count_valid_passwords(entries, password_is_valid_for_part1), 2)
+        self.assertEqual(count_valid_passwords(entries, password_is_valid_for_part2), 1)

@@ -24,31 +24,38 @@
 from . import util
 
 
-all_letters = {chr(c) for c in range(ord('a'), ord('z') + 1)}
+def count_tree_encounters(tree_grid, slope_down, slope_right):
+    row = 0
+    col = 0
+    count = 0
+    while row < len(tree_grid):
+        if tree_grid[row][col]:
+            count += 1
+        row += slope_down
+        col = (col + slope_right) % len(tree_grid[0])
+    return count
 
 
-def get_unique_answers(answers):
-    return set([c for c in answers]).intersection(all_letters)
+def load_trees(lines):
+    return [
+        [c == '#' for c in line.strip()]
+        for line in lines
+    ]
 
 
-def get_consistent_answers(group_answers):
-    individual_answers = group_answers.split("\n")
-    result = all_letters.copy() if len(individual_answers) > 0 else set()
-    for answers in individual_answers:
-        result.intersection_update(answers)
-    return result
+def get_part1_answer(tree_grid):
+    return count_tree_encounters(tree_grid, 1, 3)
 
 
-def get_part1_answer(all_group_answers):
-    return sum([len(get_unique_answers(group)) for group in all_group_answers])
-
-
-def get_part2_answer(all_group_answers):
-    return sum([len(get_consistent_answers(group)) for group in all_group_answers])
+def get_part2_answer(tree_grid):
+    product = 1
+    slopes = [(1, 1), (1, 3), (1, 5), (1, 7), (2, 1)]
+    for slope in slopes:
+        product *= count_tree_encounters(tree_grid, slope[0], slope[1])
+    return product
 
 
 def run():
-    with open(util.get_input_file_path("day6.txt")) as f:
-        all_group_answers = [group.strip() for group in f.read().split("\n\n")]
-        print(f"The answer to part 1 is {get_part1_answer(all_group_answers)}")
-        print(f"The answer to part 2 is {get_part2_answer(all_group_answers)}")
+    tree_grid = load_trees(util.get_input_file_lines("day03.txt"))
+    print(f"The answer to part 1 is {get_part1_answer(tree_grid)}")
+    print(f"The answer to part 2 is {get_part2_answer(tree_grid)}")

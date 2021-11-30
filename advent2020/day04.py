@@ -107,7 +107,7 @@ def get_part2_answer(passports):
 
 
 def run():
-    with open(util.get_input_file_path("day4.txt")) as f:
+    with open(util.get_input_file_path("day04.txt")) as f:
         passports = load_passports(f.read())
         print(f"The answer to part 1 is {get_part1_answer(passports)}")
         print(f"The answer to part 2 is {get_part2_answer(passports)}")

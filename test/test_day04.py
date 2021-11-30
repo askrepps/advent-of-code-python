@@ -23,14 +23,14 @@
 
 import unittest
 
-from advent2020.day4 import check_valid_eye_color
-from advent2020.day4 import check_valid_height
-from advent2020.day4 import check_valid_hex_color
-from advent2020.day4 import check_valid_passport_number
-from advent2020.day4 import check_valid_year
-from advent2020.day4 import get_part1_answer
-from advent2020.day4 import get_part2_answer
-from advent2020.day4 import load_passports
+from advent2020.day04 import check_valid_eye_color
+from advent2020.day04 import check_valid_height
+from advent2020.day04 import check_valid_hex_color
+from advent2020.day04 import check_valid_passport_number
+from advent2020.day04 import check_valid_year
+from advent2020.day04 import get_part1_answer
+from advent2020.day04 import get_part2_answer
+from advent2020.day04 import load_passports
 
 
 passport_data1 = """

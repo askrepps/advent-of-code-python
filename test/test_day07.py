@@ -23,9 +23,9 @@
 
 import unittest
 
-from advent2020.day7 import get_part1_answer
-from advent2020.day7 import get_part2_answer
-from advent2020.day7 import parse_bag_rules
+from advent2020.day07 import get_part1_answer
+from advent2020.day07 import get_part2_answer
+from advent2020.day07 import parse_bag_rules
 from advent2020.util import get_input_data_lines
 
 

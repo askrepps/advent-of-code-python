@@ -23,24 +23,28 @@
 
 import unittest
 
-from advent2020.day1 import find_sum_pair
-from advent2020.day1 import find_sum_triple
+from advent2020.day08 import get_part1_answer
+from advent2020.day08 import get_part2_answer
+from advent2020.day08 import parse_instructions
+from advent2020.util import get_input_data_lines
 
 
-class Day1Test(unittest.TestCase):
-    def test_day1_part1(self):
-        numbers = [1721, 979, 366, 299, 675, 1456]
-        pair = find_sum_pair(numbers, 2020)
-        self.assertEqual(len(pair), 2)
-        self.assertIn(1721, pair)
-        self.assertIn(299, pair)
-        self.assertEqual(pair[0]*pair[1], 514579)
+data = """
+nop +0
+acc +1
+jmp +4
+acc +3
+jmp -3
+acc -99
+acc +1
+jmp -4
+acc +6
+"""
 
-    def test_day1_part2(self):
-        numbers = [1721, 979, 366, 299, 675, 1456]
-        triple = find_sum_triple(numbers, 2020)
-        self.assertEqual(len(triple), 3)
-        self.assertIn(979, triple)
-        self.assertIn(366, triple)
-        self.assertIn(675, triple)
-        self.assertEqual(triple[0]*triple[1]*triple[2], 241861950)
+
+class Day8Test(unittest.TestCase):
+    def test_day8(self):
+        lines = get_input_data_lines(data)
+        instructions = parse_instructions(lines)
+        self.assertEqual(get_part1_answer(instructions), 5)
+        self.assertEqual(get_part2_answer(instructions), 8)

@@ -21,41 +21,33 @@
 # SOFTWARE.
 
 
-from . import util
+import unittest
+
+from advent2020.day06 import get_part1_answer
+from advent2020.day06 import get_part2_answer
 
 
-def count_tree_encounters(tree_grid, slope_down, slope_right):
-    row = 0
-    col = 0
-    count = 0
-    while row < len(tree_grid):
-        if tree_grid[row][col]:
-            count += 1
-        row += slope_down
-        col = (col + slope_right) % len(tree_grid[0])
-    return count
+answer_data = """
+abc
+
+a
+b
+c
+
+ab
+ac
+
+a
+a
+a
+a
+
+b
+"""
 
 
-def load_trees(lines):
-    return [
-        [c == '#' for c in line.strip()]
-        for line in lines
-    ]
-
-
-def get_part1_answer(tree_grid):
-    return count_tree_encounters(tree_grid, 1, 3)
-
-
-def get_part2_answer(tree_grid):
-    product = 1
-    slopes = [(1, 1), (1, 3), (1, 5), (1, 7), (2, 1)]
-    for slope in slopes:
-        product *= count_tree_encounters(tree_grid, slope[0], slope[1])
-    return product
-
-
-def run():
-    tree_grid = load_trees(util.get_input_file_lines("day3.txt"))
-    print(f"The answer to part 1 is {get_part1_answer(tree_grid)}")
-    print(f"The answer to part 2 is {get_part2_answer(tree_grid)}")
+class Day6Test(unittest.TestCase):
+    def test_day6(self):
+        all_group_answers = [group.strip() for group in answer_data.split("\n\n")]
+        self.assertEqual(get_part1_answer(all_group_answers), 11)
+        self.assertEqual(get_part2_answer(all_group_answers), 6)
