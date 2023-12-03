@@ -23,16 +23,24 @@
 
 import unittest
 
-from advent2020.util import get_input_file_path
+from advent2020.day01 import find_sum_pair
+from advent2020.day01 import find_sum_triple
 
 
-class UtilTest(unittest.TestCase):
-    def test_input_file_path(self):
-        file_path = get_input_file_path('dummy.txt')
-        expected_lines = [
-            'Obtain input data for each day from the original source at https://adventofcode.com/2020\n',
-            'and save it in a txt file named after the corresponding day (day01.txt, day02.txt, etc.).\n'
-        ]
-        with open(file_path) as f:
-            lines = [line for line in f]
-            self.assertListEqual(lines, expected_lines)
+class Day1Test(unittest.TestCase):
+    def test_day1_part1(self):
+        numbers = [1721, 979, 366, 299, 675, 1456]
+        pair = find_sum_pair(numbers, 2020)
+        self.assertEqual(len(pair), 2)
+        self.assertIn(1721, pair)
+        self.assertIn(299, pair)
+        self.assertEqual(pair[0]*pair[1], 514579)
+
+    def test_day1_part2(self):
+        numbers = [1721, 979, 366, 299, 675, 1456]
+        triple = find_sum_triple(numbers, 2020)
+        self.assertEqual(len(triple), 3)
+        self.assertIn(979, triple)
+        self.assertIn(366, triple)
+        self.assertIn(675, triple)
+        self.assertEqual(triple[0]*triple[1]*triple[2], 241861950)

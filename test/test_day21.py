@@ -1,6 +1,6 @@
 # MIT License
 #
-# Copyright (c) 2020 Andrew Krepps
+# Copyright (c) 2021 Andrew Krepps
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -23,16 +23,29 @@
 
 import unittest
 
-from advent2020.util import get_input_file_path
+from advent2020.day21 import get_ingredients_by_allergen
+from advent2020.day21 import get_all_allergens
+from advent2020.day21 import get_all_ingredients
+from advent2020.day21 import get_part1_answer
+from advent2020.day21 import get_part2_answer
+from advent2020.day21 import parse_input
+from advent2020.util import get_input_data_lines
 
 
-class UtilTest(unittest.TestCase):
-    def test_input_file_path(self):
-        file_path = get_input_file_path('dummy.txt')
-        expected_lines = [
-            'Obtain input data for each day from the original source at https://adventofcode.com/2020\n',
-            'and save it in a txt file named after the corresponding day (day01.txt, day02.txt, etc.).\n'
-        ]
-        with open(file_path) as f:
-            lines = [line for line in f]
-            self.assertListEqual(lines, expected_lines)
+data = """
+mxmxvkd kfcds sqjhc nhms (contains dairy, fish)
+trh fvjkl sbzzf mxmxvkd (contains dairy)
+sqjhc fvjkl (contains soy)
+sqjhc mxmxvkd sbzzf (contains fish)
+"""
+
+
+class Day21Test(unittest.TestCase):
+    def test_day21(self):
+        lines = get_input_data_lines(data)
+        foods = parse_input(lines)
+        all_ingredients = get_all_ingredients(foods)
+        all_allergens = get_all_allergens(foods)
+        ingredient_by_allergen = get_ingredients_by_allergen(foods, all_ingredients, all_allergens)
+        self.assertEqual(get_part1_answer(foods, all_ingredients, ingredient_by_allergen), 5)
+        self.assertEqual(get_part2_answer(ingredient_by_allergen), 'mxmxvkd,sqjhc,fvjkl')

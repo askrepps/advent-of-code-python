@@ -23,16 +23,17 @@
 
 import unittest
 
-from advent2020.util import get_input_file_path
+from advent2020.day05 import get_seat_id
+from advent2020.day05 import get_seat_row_col
 
 
-class UtilTest(unittest.TestCase):
-    def test_input_file_path(self):
-        file_path = get_input_file_path('dummy.txt')
-        expected_lines = [
-            'Obtain input data for each day from the original source at https://adventofcode.com/2020\n',
-            'and save it in a txt file named after the corresponding day (day01.txt, day02.txt, etc.).\n'
-        ]
-        with open(file_path) as f:
-            lines = [line for line in f]
-            self.assertListEqual(lines, expected_lines)
+class Day5Test(unittest.TestCase):
+    def test_day5(self):
+        self.assertEqual(get_seat_row_col("FBFBBFFRLR"), (44, 5))
+        self.assertEqual(get_seat_id("FBFBBFFRLR"), 357)
+        self.assertEqual(get_seat_row_col("BFFFBBFRRR"), (70, 7))
+        self.assertEqual(get_seat_id("BFFFBBFRRR"), 567)
+        self.assertEqual(get_seat_row_col("FFFBBBFRRR"), (14, 7))
+        self.assertEqual(get_seat_id("FFFBBBFRRR"), 119)
+        self.assertEqual(get_seat_row_col("BBFFBBFRLL"), (102, 4))
+        self.assertEqual(get_seat_id("BBFFBBFRLL"), 820)

@@ -21,18 +21,34 @@
 # SOFTWARE.
 
 
-import unittest
-
-from advent2020.util import get_input_file_path
+from . import util
 
 
-class UtilTest(unittest.TestCase):
-    def test_input_file_path(self):
-        file_path = get_input_file_path('dummy.txt')
-        expected_lines = [
-            'Obtain input data for each day from the original source at https://adventofcode.com/2020\n',
-            'and save it in a txt file named after the corresponding day (day01.txt, day02.txt, etc.).\n'
-        ]
-        with open(file_path) as f:
-            lines = [line for line in f]
-            self.assertListEqual(lines, expected_lines)
+all_letters = {chr(c) for c in range(ord('a'), ord('z') + 1)}
+
+
+def get_unique_answers(answers):
+    return set([c for c in answers]).intersection(all_letters)
+
+
+def get_consistent_answers(group_answers):
+    individual_answers = group_answers.split("\n")
+    result = all_letters.copy() if len(individual_answers) > 0 else set()
+    for answers in individual_answers:
+        result.intersection_update(answers)
+    return result
+
+
+def get_part1_answer(all_group_answers):
+    return sum([len(get_unique_answers(group)) for group in all_group_answers])
+
+
+def get_part2_answer(all_group_answers):
+    return sum([len(get_consistent_answers(group)) for group in all_group_answers])
+
+
+def run():
+    with open(util.get_input_file_path("day06.txt")) as f:
+        all_group_answers = [group.strip() for group in f.read().split("\n\n")]
+        print(f"The answer to part 1 is {get_part1_answer(all_group_answers)}")
+        print(f"The answer to part 2 is {get_part2_answer(all_group_answers)}")

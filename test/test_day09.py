@@ -23,16 +23,37 @@
 
 import unittest
 
-from advent2020.util import get_input_file_path
+from advent2020.day09 import find_contiguous_sum
+from advent2020.day09 import find_invalid_number
+from advent2020.util import get_input_data_lines
 
 
-class UtilTest(unittest.TestCase):
-    def test_input_file_path(self):
-        file_path = get_input_file_path('dummy.txt')
-        expected_lines = [
-            'Obtain input data for each day from the original source at https://adventofcode.com/2020\n',
-            'and save it in a txt file named after the corresponding day (day01.txt, day02.txt, etc.).\n'
-        ]
-        with open(file_path) as f:
-            lines = [line for line in f]
-            self.assertListEqual(lines, expected_lines)
+data = """
+35
+20
+15
+25
+47
+40
+62
+55
+65
+95
+102
+117
+150
+182
+127
+219
+299
+277
+309
+576
+"""
+
+
+class Day9Test(unittest.TestCase):
+    def test_day9(self):
+        numbers = [int(line) for line in get_input_data_lines(data)]
+        self.assertEqual(find_invalid_number(numbers, 5), 127)
+        self.assertListEqual(find_contiguous_sum(numbers, 127), [15, 25, 47, 40])

@@ -1,6 +1,5 @@
-# 2019 Advent of Code
+# Advent of Code - Python
 
-I know I'm late to the party, but I'm trying out Advent of Code before the
-2020 Advent Calendar starts.
+Solutions for 2019-2020 Advent of Code implemented in Python 3
 
-Advent of Code site: https://adventofcode.com/2019
+Advent of Code site: https://adventofcode.com

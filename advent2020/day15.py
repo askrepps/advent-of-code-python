@@ -21,18 +21,40 @@
 # SOFTWARE.
 
 
-import unittest
-
-from advent2020.util import get_input_file_path
+from . import util
 
 
-class UtilTest(unittest.TestCase):
-    def test_input_file_path(self):
-        file_path = get_input_file_path('dummy.txt')
-        expected_lines = [
-            'Obtain input data for each day from the original source at https://adventofcode.com/2020\n',
-            'and save it in a txt file named after the corresponding day (day01.txt, day02.txt, etc.).\n'
-        ]
-        with open(file_path) as f:
-            lines = [line for line in f]
-            self.assertListEqual(lines, expected_lines)
+def parse_numbers(number_line):
+    return [int(number) for number in number_line.split(',')]
+
+
+def play_game(numbers, turn_limit):
+    history = {}
+    last_number = None
+    for turn in range(1, turn_limit + 1):
+        two_back = last_number
+        if turn <= len(numbers):
+            last_number = numbers[turn - 1]
+        elif last_number in history.keys():
+            last_number = turn - 1 - history[last_number]
+        else:
+            last_number = 0
+        if two_back is not None:
+            history[two_back] = turn - 1
+    return last_number
+
+
+def get_part1_answer(numbers):
+    return play_game(numbers, turn_limit=2020)
+
+
+def get_part2_answer(numbers):
+    return play_game(numbers, turn_limit=30000000)
+
+
+def run():
+    lines = util.get_input_file_lines("day15.txt")
+    assert len(lines) == 1
+    numbers = parse_numbers(lines[0])
+    print(f"The answer to part 1 is {get_part1_answer(numbers)}")
+    print(f"The answer to part 2 is {get_part2_answer(numbers)}")

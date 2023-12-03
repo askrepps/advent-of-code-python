@@ -21,18 +21,39 @@
 # SOFTWARE.
 
 
-import unittest
-
-from advent2020.util import get_input_file_path
+from . import util
 
 
-class UtilTest(unittest.TestCase):
-    def test_input_file_path(self):
-        file_path = get_input_file_path('dummy.txt')
-        expected_lines = [
-            'Obtain input data for each day from the original source at https://adventofcode.com/2020\n',
-            'and save it in a txt file named after the corresponding day (day01.txt, day02.txt, etc.).\n'
-        ]
-        with open(file_path) as f:
-            lines = [line for line in f]
-            self.assertListEqual(lines, expected_lines)
+def find_sum_pair(numbers, target):
+    """Find a pair of numbers from a list that sum to the target value"""
+    for ix, x in enumerate(numbers):
+        for iy, y in enumerate(numbers):
+            if ix != iy and x + y == target:
+                return x, y
+    return None
+
+
+def find_sum_triple(numbers, target):
+    """Find three numbers from a list that sum to the target value"""
+    for ix, x in enumerate(numbers):
+        for iy, y in enumerate(numbers):
+            for iz, z in enumerate(numbers):
+                if ix != iy and ix != iz and iy != iz and x + y + z == target:
+                    return x, y, z
+    return None
+
+
+def get_part1_answer(numbers):
+    pair = find_sum_pair(numbers, 2020)
+    return pair[0]*pair[1]
+
+
+def get_part2_answer(numbers):
+    triple = find_sum_triple(numbers, 2020)
+    return triple[0]*triple[1]*triple[2]
+
+
+def run():
+    numbers = [int(line) for line in util.get_input_file_lines("day01.txt")]
+    print(f"The answer to part 1 is {get_part1_answer(numbers)}")
+    print(f"The answer to part 2 is {get_part2_answer(numbers)}")

@@ -23,16 +23,29 @@
 
 import unittest
 
-from advent2020.util import get_input_file_path
+from advent2020.day13 import get_part1_answer
+from advent2020.day13 import get_part2_answer
+from advent2020.day13 import parse_bus_schedule
+from advent2020.util import get_input_data_lines
 
 
-class UtilTest(unittest.TestCase):
-    def test_input_file_path(self):
-        file_path = get_input_file_path('dummy.txt')
-        expected_lines = [
-            'Obtain input data for each day from the original source at https://adventofcode.com/2020\n',
-            'and save it in a txt file named after the corresponding day (day01.txt, day02.txt, etc.).\n'
-        ]
-        with open(file_path) as f:
-            lines = [line for line in f]
-            self.assertListEqual(lines, expected_lines)
+bus_data1 = """
+939
+7,13,x,x,59,x,31,19
+"""
+
+
+class Day13Test(unittest.TestCase):
+    def test_day13(self):
+        arrival_time, buses = parse_bus_schedule(get_input_data_lines(bus_data1))
+        self.assertEqual(get_part1_answer(arrival_time, buses), 295)
+        self.run_part2_test("7,13,x,x,59,x,31,19", 1068781)
+        self.run_part2_test("17,x,13,19", 3417)
+        self.run_part2_test("67,7,59,61", 754018)
+        self.run_part2_test("67,x,7,59,61", 779210)
+        self.run_part2_test("67,7,x,59,61", 1261476)
+        self.run_part2_test("1789,37,47,1889", 1202161486)
+
+    def run_part2_test(self, bus_line, expected_result):
+        _, buses = parse_bus_schedule(["-1", bus_line])
+        self.assertEqual(get_part2_answer(buses), expected_result)

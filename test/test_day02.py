@@ -23,16 +23,29 @@
 
 import unittest
 
-from advent2020.util import get_input_file_path
+from advent2020.day02 import parse_entries
+from advent2020.day02 import count_valid_passwords
+from advent2020.day02 import password_is_valid_for_part1
+from advent2020.day02 import password_is_valid_for_part2
+from advent2020.util import get_input_data_lines
 
 
-class UtilTest(unittest.TestCase):
-    def test_input_file_path(self):
-        file_path = get_input_file_path('dummy.txt')
-        expected_lines = [
-            'Obtain input data for each day from the original source at https://adventofcode.com/2020\n',
-            'and save it in a txt file named after the corresponding day (day01.txt, day02.txt, etc.).\n'
+password_data = """
+1-3 a: abcde
+1-3 b: cdefg
+2-9 c: ccccccccc
+"""
+
+
+class Day2Test(unittest.TestCase):
+    def test_day2(self):
+        lines = get_input_data_lines(password_data)
+        entries = parse_entries(lines)
+        expected_entries = [
+            {"password": "abcde", "letter": "a", "min": 1, "max": 3},
+            {"password": "cdefg", "letter": "b", "min": 1, "max": 3},
+            {"password": "ccccccccc", "letter": "c", "min": 2, "max": 9},
         ]
-        with open(file_path) as f:
-            lines = [line for line in f]
-            self.assertListEqual(lines, expected_lines)
+        self.assertListEqual(entries, expected_entries)
+        self.assertEqual(count_valid_passwords(entries, password_is_valid_for_part1), 2)
+        self.assertEqual(count_valid_passwords(entries, password_is_valid_for_part2), 1)

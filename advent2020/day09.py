@@ -21,18 +21,38 @@
 # SOFTWARE.
 
 
-import unittest
+from . import day01
+from . import util
 
-from advent2020.util import get_input_file_path
+
+def find_invalid_number(numbers, preamble_length):
+    for idx in range(preamble_length, len(numbers)):
+        num = numbers[idx]
+        if day01.find_sum_pair(numbers[idx - preamble_length:idx], num) is None:
+            return num
+    return None
 
 
-class UtilTest(unittest.TestCase):
-    def test_input_file_path(self):
-        file_path = get_input_file_path('dummy.txt')
-        expected_lines = [
-            'Obtain input data for each day from the original source at https://adventofcode.com/2020\n',
-            'and save it in a txt file named after the corresponding day (day01.txt, day02.txt, etc.).\n'
-        ]
-        with open(file_path) as f:
-            lines = [line for line in f]
-            self.assertListEqual(lines, expected_lines)
+def find_contiguous_sum(numbers, target):
+    for length in range(2, len(numbers)):
+        for idx in range(len(numbers) - length + 1):
+            contiguous_range = numbers[idx:idx+length]
+            if sum(numbers[idx:idx+length]) == target:
+                return contiguous_range
+    return None
+
+
+def get_part1_answer(numbers):
+    return find_invalid_number(numbers, 25)
+
+
+def get_part2_answer(numbers, invalid_num):
+    contiguous_range = find_contiguous_sum(numbers, invalid_num)
+    return min(contiguous_range) + max(contiguous_range)
+
+
+def run():
+    numbers = [int(line) for line in util.get_input_file_lines("day09.txt")]
+    invalid_num = get_part1_answer(numbers)
+    print(f"The answer to part 1 is {invalid_num}")
+    print(f"The answer to part 2 is {get_part2_answer(numbers, invalid_num)}")

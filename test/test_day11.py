@@ -23,16 +23,27 @@
 
 import unittest
 
-from advent2020.util import get_input_file_path
+from advent2020.day11 import get_part1_answer
+from advent2020.day11 import get_part2_answer
+from advent2020.util import get_input_data_lines
 
 
-class UtilTest(unittest.TestCase):
-    def test_input_file_path(self):
-        file_path = get_input_file_path('dummy.txt')
-        expected_lines = [
-            'Obtain input data for each day from the original source at https://adventofcode.com/2020\n',
-            'and save it in a txt file named after the corresponding day (day01.txt, day02.txt, etc.).\n'
-        ]
-        with open(file_path) as f:
-            lines = [line for line in f]
-            self.assertListEqual(lines, expected_lines)
+seat_data = """
+L.LL.LL.LL
+LLLLLLL.LL
+L.L.L..L..
+LLLL.LL.LL
+L.LL.LL.LL
+L.LLLLL.LL
+..L.L.....
+LLLLLLLLLL
+L.LLLLLL.L
+L.LLLLL.LL
+"""
+
+
+class Day11Test(unittest.TestCase):
+    def test_day11(self):
+        seat_grid = get_input_data_lines(seat_data)
+        self.assertEqual(get_part1_answer(seat_grid), 37)
+        self.assertEqual(get_part2_answer(seat_grid), 26)
