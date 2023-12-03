@@ -1,6 +1,6 @@
 # MIT License
 #
-# Copyright (c) 2020 Andrew Krepps
+# Copyright (c) 2020-2023 Andrew Krepps
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,18 +21,33 @@
 # SOFTWARE.
 
 
-import unittest
-
-from adventutil import get_input_file_path
+import adventutil
 
 
-class UtilTest(unittest.TestCase):
-    def test_input_file_path(self):
-        file_path = get_input_file_path('README.txt')
-        expected_lines = [
-            "Obtain input data for each day from the original source at https://adventofcode.com and save it in a\n",
-            "txt file named after the corresponding year and day (input-2019-day01.txt, input-2019-day02.txt, etc.).\n"
-        ]
-        with open(file_path) as f:
-            lines = [line for line in f]
-            self.assertListEqual(lines, expected_lines)
+def calc_fuel(module_mass):
+    """Calculate the fuel required to launch a module based on its mass"""
+    return module_mass//3 - 2
+
+
+def calc_fuel_recursive(module_mass):
+    """Calculate the fuel required to launch a module based on its mass, including the mass of the added fuel"""
+    added_fuel = calc_fuel(module_mass)
+    if added_fuel <= 0:
+        return 0
+    else:
+        return added_fuel + calc_fuel_recursive(added_fuel)
+
+
+def get_part1_answer(module_masses):
+    return sum([calc_fuel(mass) for mass in module_masses])
+
+
+def get_part2_answer(module_masses):
+    return sum([calc_fuel_recursive(mass) for mass in module_masses])
+
+
+def run():
+    with open(adventutil.get_input_file_path('input-2019-day01.txt')) as f:
+        module_masses = [int(mass) for mass in f if len(mass.strip()) > 0]
+        print(f"The answer for part 1 is {get_part1_answer(module_masses)}")
+        print(f"The answer for part 2 is {get_part2_answer(module_masses)}")

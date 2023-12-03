@@ -1,6 +1,6 @@
 # MIT License
 #
-# Copyright (c) 2020 Andrew Krepps
+# Copyright (c) 2020-2023 Andrew Krepps
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,18 +21,41 @@
 # SOFTWARE.
 
 
-import unittest
-
-from adventutil import get_input_file_path
+import adventutil
 
 
-class UtilTest(unittest.TestCase):
-    def test_input_file_path(self):
-        file_path = get_input_file_path('README.txt')
-        expected_lines = [
-            "Obtain input data for each day from the original source at https://adventofcode.com and save it in a\n",
-            "txt file named after the corresponding year and day (input-2019-day01.txt, input-2019-day02.txt, etc.).\n"
-        ]
-        with open(file_path) as f:
-            lines = [line for line in f]
-            self.assertListEqual(lines, expected_lines)
+def code_to_num(code, high_symbol):
+    num = 0
+    for idx, c in enumerate(code):
+        if c == high_symbol:
+            num += 2**(len(code) - idx - 1)
+    return num
+
+
+def get_seat_row_col(boarding_pass):
+    row_code = boarding_pass[:7]
+    column_code = boarding_pass[7:]
+    return code_to_num(row_code, "B"), code_to_num(column_code, "R")
+
+
+def get_seat_id(boarding_pass):
+    row, col = get_seat_row_col(boarding_pass)
+    return row*8 + col
+
+
+def get_part1_answer(seat_ids):
+    return max(seat_ids)
+
+
+def get_part2_answer(seat_ids):
+    sorted_ids = sorted(seat_ids)
+    for idx in range(len(sorted_ids) - 1):
+        if sorted_ids[idx] + 1 == sorted_ids[idx + 1] - 1:
+            return sorted_ids[idx] + 1
+    return None
+
+
+def run():
+    seat_ids = [get_seat_id(line) for line in adventutil.get_input_file_lines("input-2020-day05.txt")]
+    print(f"The answer to part 1 is {get_part1_answer(seat_ids)}")
+    print(f"The answer to part 2 is {get_part2_answer(seat_ids)}")

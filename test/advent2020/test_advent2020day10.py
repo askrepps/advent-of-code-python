@@ -1,6 +1,6 @@
 # MIT License
 #
-# Copyright (c) 2020 Andrew Krepps
+# Copyright (c) 2020-2023 Andrew Krepps
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -23,16 +23,66 @@
 
 import unittest
 
-from adventutil import get_input_file_path
+from advent2020.advent2020day10 import get_part1_answer
+from advent2020.advent2020day10 import get_part2_answer
+from adventutil import get_input_data_lines
 
 
-class UtilTest(unittest.TestCase):
-    def test_input_file_path(self):
-        file_path = get_input_file_path('README.txt')
-        expected_lines = [
-            "Obtain input data for each day from the original source at https://adventofcode.com and save it in a\n",
-            "txt file named after the corresponding year and day (input-2019-day01.txt, input-2019-day02.txt, etc.).\n"
-        ]
-        with open(file_path) as f:
-            lines = [line for line in f]
-            self.assertListEqual(lines, expected_lines)
+adapter_data1 = """
+16
+10
+15
+5
+1
+11
+7
+19
+6
+12
+4
+"""
+
+adapter_data2 = """
+28
+33
+18
+42
+31
+14
+46
+20
+48
+47
+24
+23
+49
+45
+19
+38
+39
+11
+1
+32
+25
+35
+8
+17
+7
+9
+4
+2
+34
+10
+3
+"""
+
+
+class Advent2020Day10Test(unittest.TestCase):
+    def test_advent2020day10(self):
+        self.run_day10_test(adapter_data1, 35, 8)
+        self.run_day10_test(adapter_data2, 220, 19208)
+
+    def run_day10_test(self, data, expected_part1, expected_part2):
+        adapters = [int(line) for line in get_input_data_lines(data)]
+        self.assertEqual(get_part1_answer(adapters), expected_part1)
+        self.assertEqual(get_part2_answer(adapters), expected_part2)

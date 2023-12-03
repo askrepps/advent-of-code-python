@@ -1,6 +1,6 @@
 # MIT License
 #
-# Copyright (c) 2020 Andrew Krepps
+# Copyright (c) 2020-2023 Andrew Krepps
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -23,16 +23,31 @@
 
 import unittest
 
-from adventutil import get_input_file_path
+from advent2019.advent2019day03 import get_part1_answer
+from advent2019.advent2019day03 import get_part2_answer
 
 
-class UtilTest(unittest.TestCase):
-    def test_input_file_path(self):
-        file_path = get_input_file_path('README.txt')
-        expected_lines = [
-            "Obtain input data for each day from the original source at https://adventofcode.com and save it in a\n",
-            "txt file named after the corresponding year and day (input-2019-day01.txt, input-2019-day02.txt, etc.).\n"
-        ]
-        with open(file_path) as f:
-            lines = [line for line in f]
-            self.assertListEqual(lines, expected_lines)
+def prep_data(path_data):
+    return [line for line in path_data.split("\n") if len(line.strip()) > 0]
+
+
+class Advent2019Day3Test(unittest.TestCase):
+    def test_advent2019day03(self):
+        path_data1 = """
+            R75,D30,R83,U83,L12,D49,R71,U7,L72
+            U62,R66,U55,R34,D71,R55,D58,R83
+        """
+        path_data2 = """
+            R98,U47,R26,D63,R33,U87,L62,D20,R33,U53,R51
+            U98,R91,D20,R16,D67,R40,U7,R15,U6,R7
+        """
+        self.run_part1_test(path_data1, 159)
+        self.run_part1_test(path_data2, 135)
+        self.run_part2_test(path_data1, 610)
+        self.run_part2_test(path_data2, 410)
+
+    def run_part1_test(self, path_data, expected_distance):
+        self.assertEqual(get_part1_answer(prep_data(path_data)), expected_distance)
+
+    def run_part2_test(self, path_data, expected_distance):
+        self.assertEqual(get_part2_answer(prep_data(path_data)), expected_distance)

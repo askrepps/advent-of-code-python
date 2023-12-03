@@ -1,6 +1,6 @@
 # MIT License
 #
-# Copyright (c) 2020 Andrew Krepps
+# Copyright (c) 2020-2023 Andrew Krepps
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -23,16 +23,13 @@
 
 import unittest
 
-from adventutil import get_input_file_path
+from advent2019.advent2019day02 import run_program
 
 
-class UtilTest(unittest.TestCase):
-    def test_input_file_path(self):
-        file_path = get_input_file_path('README.txt')
-        expected_lines = [
-            "Obtain input data for each day from the original source at https://adventofcode.com and save it in a\n",
-            "txt file named after the corresponding year and day (input-2019-day01.txt, input-2019-day02.txt, etc.).\n"
-        ]
-        with open(file_path) as f:
-            lines = [line for line in f]
-            self.assertListEqual(lines, expected_lines)
+class Advent2019Day02Test(unittest.TestCase):
+    def test_advent2020day02_part1(self):
+        # examples provided by day 2 prompt
+        self.assertListEqual(run_program([1, 0, 0, 0, 99]), [2, 0, 0, 0, 99])
+        self.assertListEqual(run_program([2, 3, 0, 3, 99]), [2, 3, 0, 6, 99])
+        self.assertListEqual(run_program([2, 4, 4, 5, 99, 0]), [2, 4, 4, 5, 99, 9801])
+        self.assertListEqual(run_program([1, 1, 1, 4, 99, 5, 6, 0, 99]), [30, 1, 1, 4, 2, 5, 6, 0, 99])

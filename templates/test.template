@@ -3,9 +3,9 @@ ${license}
 
 import unittest
 
-from advent${advent_year}.day${day} import get_part1_answer
-from advent${advent_year}.day${day} import get_part2_answer
-from advent${advent_year}.util import get_input_data_lines
+from advent${advent_year}.advent${advent_year}day${day} import get_part1_answer
+from advent${advent_year}.advent${advent_year}day${day} import get_part2_answer
+from adventutil import get_input_data_lines
 
 
 data = """
@@ -13,8 +13,8 @@ data = """
 """
 
 
-class Day${day}Test(unittest.TestCase):
-    def test_day${day}(self):
+class Advent${advent_year}Day${day}Test(unittest.TestCase):
+    def test_advent${advent_year}day${day}(self):
         lines = get_input_data_lines(data)
         self.assertEqual(get_part1_answer(lines), None)
         self.assertEqual(get_part2_answer(lines), None)

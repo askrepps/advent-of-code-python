@@ -1,6 +1,6 @@
 # MIT License
 #
-# Copyright (c) 2020 Andrew Krepps
+# Copyright (c) 2020-2023 Andrew Krepps
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -39,18 +39,23 @@ def gen_file_from_template(temp_path, out_path, var_map):
             out_f.writelines((substitute_vars(line, var_map) for line in temp_f))
 
 
-def generate_code_for_day(day):
+def generate_code_for_day(year, day):
     padded_day = f"{day:02d}"
-    day_file_name = f"day{padded_day}.py"
-    day_file_path = os.path.join("advent2020", day_file_name)
+    day_dir_path = f"advent{year}"
+    day_file_name = f"advent{year}day{padded_day}.py"
+    day_file_path = os.path.join(day_dir_path, day_file_name)
     test_file_name = f"test_{day_file_name}"
-    test_file_path = os.path.join("test", test_file_name)
+    test_dir_path = os.path.join("test", day_dir_path)
+    test_file_path = os.path.join(test_dir_path, test_file_name)
+
     if os.path.exists(day_file_path) or os.path.exists(test_file_path):
         raise RuntimeError(f"Files for day {day} already exist")
+    os.makedirs(day_dir_path, exist_ok=True)
+    os.makedirs(test_dir_path, exist_ok=True)
 
     with open(os.path.join("templates", "license.template")) as license_f:
         var_map = {
-            "advent_year": "2020",
+            "advent_year": year,
             "date_year": str(datetime.datetime.now().year),
             "day": padded_day
         }
@@ -63,14 +68,15 @@ def generate_code_for_day(day):
 
 
 def gen_day_main(args):
-    if len(args) == 0:
-        raise RuntimeError("Must provide a day number")
+    if len(args) < 2:
+        raise RuntimeError("Must provide a year and day number")
     else:
         try:
-            day = int(args[0])
+            year = args[0]
+            day = int(args[1])
             if day < 0:
                 raise ValueError
-            generate_code_for_day(day)
+            generate_code_for_day(year, day)
         except ValueError:
             raise RuntimeError("Day must be a valid positive number")
 

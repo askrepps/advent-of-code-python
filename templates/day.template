@@ -1,7 +1,7 @@
 ${license}
 
 
-from . import util
+import adventutil
 
 
 def get_part1_answer(lines):
@@ -13,6 +13,6 @@ def get_part2_answer(lines):
 
 
 def run():
-    lines = util.get_input_file_lines("day${day}.txt")
+    lines = adventutil.get_input_file_lines("input-${advent_year}-day${day}.txt")
     print(f"The answer to part 1 is {get_part1_answer(lines)}")
     print(f"The answer to part 2 is {get_part2_answer(lines)}")

@@ -1,6 +1,6 @@
 # MIT License
 #
-# Copyright (c) 2020 Andrew Krepps
+# Copyright (c) 2020-2023 Andrew Krepps
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -23,80 +23,96 @@
 
 import sys
 
-from advent2020 import day01
-from advent2020 import day02
-from advent2020 import day03
-from advent2020 import day04
-from advent2020 import day05
-from advent2020 import day06
-from advent2020 import day07
-from advent2020 import day08
-from advent2020 import day09
-from advent2020 import day10
-from advent2020 import day11
-from advent2020 import day12
-from advent2020 import day13
-from advent2020 import day14
-from advent2020 import day15
-from advent2020 import day16
-from advent2020 import day17
-from advent2020 import day18
-from advent2020 import day19
-from advent2020 import day20
-from advent2020 import day21
-from advent2020 import day22
-from advent2020 import day23
-from advent2020 import day24
-from advent2020 import day25
+from advent2019 import advent2019day01
+from advent2019 import advent2019day02
+from advent2019 import advent2019day03
+from advent2020 import advent2020day01
+from advent2020 import advent2020day02
+from advent2020 import advent2020day03
+from advent2020 import advent2020day04
+from advent2020 import advent2020day05
+from advent2020 import advent2020day06
+from advent2020 import advent2020day07
+from advent2020 import advent2020day08
+from advent2020 import advent2020day09
+from advent2020 import advent2020day10
+from advent2020 import advent2020day11
+from advent2020 import advent2020day12
+from advent2020 import advent2020day13
+from advent2020 import advent2020day14
+from advent2020 import advent2020day15
+from advent2020 import advent2020day16
+from advent2020 import advent2020day17
+from advent2020 import advent2020day18
+from advent2020 import advent2020day19
+from advent2020 import advent2020day20
+from advent2020 import advent2020day21
+from advent2020 import advent2020day22
+from advent2020 import advent2020day23
+from advent2020 import advent2020day24
+from advent2020 import advent2020day25
 
 
-day_runners = [
-    lambda: day01.run(),
-    lambda: day02.run(),
-    lambda: day03.run(),
-    lambda: day04.run(),
-    lambda: day05.run(),
-    lambda: day06.run(),
-    lambda: day07.run(),
-    lambda: day08.run(),
-    lambda: day09.run(),
-    lambda: day10.run(),
-    lambda: day11.run(),
-    lambda: day12.run(),
-    lambda: day13.run(),
-    lambda: day14.run(),
-    lambda: day15.run(),
-    lambda: day16.run(),
-    lambda: day17.run(),
-    lambda: day18.run(),
-    lambda: day19.run(),
-    lambda: day20.run(),
-    lambda: day21.run(),
-    lambda: day22.run(),
-    lambda: day23.run(),
-    lambda: day24.run(),
-    lambda: day25.run()
-]
+runners = {
+    "2019": [
+        lambda: advent2019day01.run(),
+        lambda: advent2019day02.run(),
+        lambda: advent2019day03.run()
+    ],
+    "2020": [
+        lambda: advent2020day01.run(),
+        lambda: advent2020day02.run(),
+        lambda: advent2020day03.run(),
+        lambda: advent2020day04.run(),
+        lambda: advent2020day05.run(),
+        lambda: advent2020day06.run(),
+        lambda: advent2020day07.run(),
+        lambda: advent2020day08.run(),
+        lambda: advent2020day09.run(),
+        lambda: advent2020day10.run(),
+        lambda: advent2020day11.run(),
+        lambda: advent2020day12.run(),
+        lambda: advent2020day13.run(),
+        lambda: advent2020day14.run(),
+        lambda: advent2020day15.run(),
+        lambda: advent2020day16.run(),
+        lambda: advent2020day17.run(),
+        lambda: advent2020day18.run(),
+        lambda: advent2020day19.run(),
+        lambda: advent2020day20.run(),
+        lambda: advent2020day21.run(),
+        lambda: advent2020day22.run(),
+        lambda: advent2020day23.run(),
+        lambda: advent2020day24.run(),
+        lambda: advent2020day25.run()
+    ]
+}
 
 
-def raise_day_input_error(day, max_day):
-    raise RuntimeError(f"Day must be an integer between 1 and {max_day} (entered '{day}')")
+def raise_input_error(year, day, max_day):
+    raise RuntimeError(f"Day must be an integer between 1 and {max_day} for year {year} (entered '{day}')")
 
 
-def advent2020_main(args):
-    max_day = len(day_runners)
-    if len(args) == 0:
+def advent_main(args):
+    if len(args) < 1:
+        year = input(f"Enter a year to run: ")
+    else:
+        year = args[0]
+    if year not in runners:
+        raise RuntimeError(f"No runners found for year {year}")
+    max_day = len(runners[year])
+    if len(args) < 2:
         day = input(f"Enter a day to run (1 - {max_day}): ")
     else:
-        day = args[0]
+        day = args[1]
     try:
         day_idx = int(day) - 1
         if day_idx < 0 or day_idx >= max_day:
-            raise_day_input_error(day, max_day)
-        day_runners[day_idx]()
+            raise_input_error(year, day, max_day)
+        runners[year][day_idx]()
     except ValueError:
-        raise_day_input_error(day, max_day)
+        raise_input_error(year, day, max_day)
 
 
 if __name__ == "__main__":
-    advent2020_main(sys.argv[1:])
+    advent_main(sys.argv[1:])

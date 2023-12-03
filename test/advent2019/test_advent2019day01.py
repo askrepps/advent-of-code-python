@@ -1,6 +1,6 @@
 # MIT License
 #
-# Copyright (c) 2020 Andrew Krepps
+# Copyright (c) 2020-2023 Andrew Krepps
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -23,16 +23,20 @@
 
 import unittest
 
-from adventutil import get_input_file_path
+from advent2019.advent2019day01 import calc_fuel
+from advent2019.advent2019day01 import calc_fuel_recursive
 
 
-class UtilTest(unittest.TestCase):
-    def test_input_file_path(self):
-        file_path = get_input_file_path('README.txt')
-        expected_lines = [
-            "Obtain input data for each day from the original source at https://adventofcode.com and save it in a\n",
-            "txt file named after the corresponding year and day (input-2019-day01.txt, input-2019-day02.txt, etc.).\n"
-        ]
-        with open(file_path) as f:
-            lines = [line for line in f]
-            self.assertListEqual(lines, expected_lines)
+class Advent2019Day01Test(unittest.TestCase):
+    def test_advent2019day01_part1(self):
+        # examples provided by day 1 (part 1) prompt
+        self.assertEqual(calc_fuel(12), 2)
+        self.assertEqual(calc_fuel(14), 2)
+        self.assertEqual(calc_fuel(1969), 654)
+        self.assertEqual(calc_fuel(100756), 33583)
+
+    def test_advent2019day01_part2(self):
+        # examples provided by day 1 (part 2) prompt
+        self.assertEqual(calc_fuel_recursive(14), 2)
+        self.assertEqual(calc_fuel_recursive(1969), 966)
+        self.assertEqual(calc_fuel_recursive(100756), 50346)

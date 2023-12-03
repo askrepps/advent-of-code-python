@@ -1,6 +1,6 @@
 # MIT License
 #
-# Copyright (c) 2020 Andrew Krepps
+# Copyright (c) 2020-2023 Andrew Krepps
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,18 +21,26 @@
 # SOFTWARE.
 
 
-import unittest
-
-from adventutil import get_input_file_path
+import os
 
 
-class UtilTest(unittest.TestCase):
-    def test_input_file_path(self):
-        file_path = get_input_file_path('README.txt')
-        expected_lines = [
-            "Obtain input data for each day from the original source at https://adventofcode.com and save it in a\n",
-            "txt file named after the corresponding year and day (input-2019-day01.txt, input-2019-day02.txt, etc.).\n"
-        ]
-        with open(file_path) as f:
-            lines = [line for line in f]
-            self.assertListEqual(lines, expected_lines)
+def get_input_file_path(file_name):
+    """Get the path to the input file with a given name (inside the input directory in the project root)"""
+    parent_path = os.path.split(os.path.abspath(__file__))[0]
+    return os.path.join(parent_path, 'input', file_name)
+
+
+def get_input_file_lines(file_name):
+    """Get the non-empty lines from the input file with a given name"""
+    with open(get_input_file_path(file_name)) as f:
+        return remove_blank_lines(f)
+
+
+def get_input_data_lines(data):
+    """Get the non-empty lines from a string containing all input data"""
+    return remove_blank_lines(data.split("\n"))
+
+
+def remove_blank_lines(lines):
+    """Get all non-blank lines out of a list of lines"""
+    return [line_out for line_out in (line_in.strip() for line_in in lines) if len(line_out) > 0]

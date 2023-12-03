@@ -1,6 +1,6 @@
 # MIT License
 #
-# Copyright (c) 2020 Andrew Krepps
+# Copyright (c) 2020-2023 Andrew Krepps
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -23,16 +23,29 @@
 
 import unittest
 
-from adventutil import get_input_file_path
+from advent2020.advent2020day02 import parse_entries
+from advent2020.advent2020day02 import count_valid_passwords
+from advent2020.advent2020day02 import password_is_valid_for_part1
+from advent2020.advent2020day02 import password_is_valid_for_part2
+from adventutil import get_input_data_lines
 
 
-class UtilTest(unittest.TestCase):
-    def test_input_file_path(self):
-        file_path = get_input_file_path('README.txt')
-        expected_lines = [
-            "Obtain input data for each day from the original source at https://adventofcode.com and save it in a\n",
-            "txt file named after the corresponding year and day (input-2019-day01.txt, input-2019-day02.txt, etc.).\n"
+password_data = """
+1-3 a: abcde
+1-3 b: cdefg
+2-9 c: ccccccccc
+"""
+
+
+class Advent2020Day02Test(unittest.TestCase):
+    def test_advent2020day2(self):
+        lines = get_input_data_lines(password_data)
+        entries = parse_entries(lines)
+        expected_entries = [
+            {"password": "abcde", "letter": "a", "min": 1, "max": 3},
+            {"password": "cdefg", "letter": "b", "min": 1, "max": 3},
+            {"password": "ccccccccc", "letter": "c", "min": 2, "max": 9},
         ]
-        with open(file_path) as f:
-            lines = [line for line in f]
-            self.assertListEqual(lines, expected_lines)
+        self.assertListEqual(entries, expected_entries)
+        self.assertEqual(count_valid_passwords(entries, password_is_valid_for_part1), 2)
+        self.assertEqual(count_valid_passwords(entries, password_is_valid_for_part2), 1)
